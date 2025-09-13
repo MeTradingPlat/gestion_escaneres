@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.metradingplat</groupId>
-	<artifactId>ms_escaner</artifactId>
+	<artifactId>gestion_escaneres</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ms_escaner</name>
+	<name>gestion_escaneres</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
