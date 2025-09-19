@@ -35,6 +35,12 @@ public class FuenteMensajesImplAdapter implements FuenteMensajesIntPort {
     }
 
     @Override
+    public String internacionalizarMensaje(String llaveMensaje) {
+        if (llaveMensaje.isBlank()) return "";
+        return this.obtenerMensaje(llaveMensaje, this.getLocale());
+    }
+
+    @Override
     public MercadoDTORespuesta internacionalizarMercado(MercadoDTORespuesta objeto) {
         if (objeto == null || objeto.getEnumMercado() == null) return objeto;
         objeto.setEtiqueta(this.obtenerMensaje(objeto.getEnumMercado().getEtiqueta(), this.getLocale()));

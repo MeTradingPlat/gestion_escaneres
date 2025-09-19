@@ -16,7 +16,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 @Configuration
 public class FilterStrategyBeanRegistrar implements BeanDefinitionRegistryPostProcessor {
 
-    private static final String BASE_PACKAGE = "net.metradingplat.ms_escaner.domain.strategies.Filtros";
+    private static final String BASE_PACKAGE = "com.metradingplat.gestion_escaneres.domain.strategies.filtros";
 
     @Override
     public void postProcessBeanDefinitionRegistry(@NonNull BeanDefinitionRegistry registry) {
