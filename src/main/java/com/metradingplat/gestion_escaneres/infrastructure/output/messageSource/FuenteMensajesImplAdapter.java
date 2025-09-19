@@ -35,9 +35,9 @@ public class FuenteMensajesImplAdapter implements FuenteMensajesIntPort {
     }
 
     @Override
-    public String internacionalizarMensaje(String llaveMensaje) {
+    public String internacionalizarMensaje(String llaveMensaje, Object... args) {
         if (llaveMensaje.isBlank()) return "";
-        return this.obtenerMensaje(llaveMensaje, this.getLocale());
+        return this.obtenerMensaje(llaveMensaje, this.getLocale(), args);
     }
 
     @Override

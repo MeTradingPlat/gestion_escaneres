@@ -15,7 +15,7 @@ public interface FuenteMensajesIntPort {
 
     // Mensajes
     String obtenerMensaje(String llaveMensaje, Locale locale, Object... args);
-    String internacionalizarMensaje(String llaveMensaje);
+    String internacionalizarMensaje(String llaveMensaje, Object... args);
 
     // Mercado
     MercadoDTORespuesta internacionalizarMercado(MercadoDTORespuesta objeto);
