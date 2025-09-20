@@ -1,5 +1,6 @@
 package com.metradingplat.gestion_escaneres.infrastructure.output.messageSource;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -27,7 +28,10 @@ public class FuenteMensajesImplAdapter implements FuenteMensajesIntPort {
 
     @Override
     public String obtenerMensaje(String llaveMensaje, Locale locale, Object... args) {
-        return this.messageSource.getMessage(llaveMensaje, args, locale);
+        String pattern = this.messageSource.getMessage(llaveMensaje, null, locale);
+        return (args != null && args.length > 0)
+                ? MessageFormat.format(pattern, args)
+                : pattern;
     }
 
     private Locale getLocale() {
@@ -36,8 +40,8 @@ public class FuenteMensajesImplAdapter implements FuenteMensajesIntPort {
 
     @Override
     public String internacionalizarMensaje(String llaveMensaje, Object... args) {
-        if (llaveMensaje.isBlank()) return "";
-        return this.obtenerMensaje(llaveMensaje, this.getLocale(), args);
+        String mensaje = this.obtenerMensaje(llaveMensaje, this.getLocale(), args);
+        return mensaje;
     }
 
     @Override
