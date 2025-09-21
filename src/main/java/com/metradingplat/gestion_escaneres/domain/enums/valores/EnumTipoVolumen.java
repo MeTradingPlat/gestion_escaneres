@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EnumTipoVolumen implements IEnumValores{
-    CIERRE("tipoVolumen.cierre"),
-    APERTURA("tipoVolumen.apertura");
+    CIERRE("crossLevel.close"),
+    APERTURA("crossLevel.open");
 
     private final String etiqueta;
 }

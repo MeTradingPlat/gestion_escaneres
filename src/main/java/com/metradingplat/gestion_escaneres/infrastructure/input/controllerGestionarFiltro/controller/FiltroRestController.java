@@ -42,7 +42,7 @@ public class FiltroRestController {
 
     @GetMapping
     public ResponseEntity<List<FiltroDtoRespuesta>> obtenerFiltrosPorCategoria(
-            @RequestParam("categoria") @NotNull(message = "filtro.categoria.empty") EnumCategoriaFiltro categoria) {
+            @RequestParam("categoria") @NotNull(message = "validation.enum.invalid") EnumCategoriaFiltro categoria) {
         List<Filtro> filtros = this.objGestionarFiltroCUInt.obtenerFiltrosPorCategoria(categoria);
         List<FiltroDtoRespuesta> filtrosDTO = this.objMapper.mappearListaDeFiltroARespuesta(filtros);
         this.objFuenteMensajes.internacionalizarFiltros(filtrosDTO);
@@ -51,7 +51,7 @@ public class FiltroRestController {
 
     @GetMapping("/defecto")
     public ResponseEntity<FiltroDtoRespuesta> obtenerFiltroPorDefecto(
-            @RequestParam("filtro") @NotNull(message = "filtro.enum.empty") EnumFiltro enumFiltro) {
+            @RequestParam("filtro") @NotNull(message = "validation.enum.invalid") EnumFiltro enumFiltro) {
         Filtro filtro = this.objGestionarFiltroCUInt.obtenerFiltroPorDefecto(enumFiltro);
         FiltroDtoRespuesta filtroDTO = this.objMapper.mappearDeFiltroARespuesta(filtro);
         this.objFuenteMensajes.internacionalizarFiltro(filtroDTO);
@@ -60,7 +60,7 @@ public class FiltroRestController {
 
     @GetMapping("/escaner/{idEscaner}")
     public ResponseEntity<List<FiltroDtoRespuesta>> obtenerFiltrosEscaner(
-            @PathVariable("idEscaner") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long idEscaner) {
+            @PathVariable("idEscaner") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long idEscaner) {
         List<Filtro> filtros = this.objGestionarFiltroCUInt.obtenerFiltros(idEscaner);
         List<FiltroDtoRespuesta> filtrosDTO = this.objMapper.mappearListaDeFiltroARespuesta(filtros);
         this.objFuenteMensajes.internacionalizarFiltros(filtrosDTO);
@@ -69,8 +69,8 @@ public class FiltroRestController {
 
     @PostMapping("/escaner/{idEscaner}")
     public ResponseEntity<List<FiltroDtoRespuesta>> guardarFiltrosDeEscaner(
-            @PathVariable("idEscaner") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long idEscaner,
-            @RequestBody @Valid @NotNull(message = "filtro.peticion.empty") List<FiltroDtoPeticion> peticiones) {
+            @PathVariable("idEscaner") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long idEscaner,
+            @RequestBody @Valid @NotNull(message = "validation.filter.request.required") List<FiltroDtoPeticion> peticiones) {
         List<Filtro> filtros = this.objMapper.mappearListaDePeticionAFiltro(peticiones);
         List<Filtro> guardados = this.objGestionarFiltroCUInt.guardarFiltros(idEscaner, filtros);
         List<FiltroDtoRespuesta> filtrosDTO = this.objMapper.mappearListaDeFiltroARespuesta(guardados);

@@ -12,6 +12,6 @@ import com.metradingplat.gestion_escaneres.domain.enums.EnumCategoriaFiltro;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoriaDTOPeticion {
-    @NotNull(message = "categoria.enumCategoriaFiltro.empty")
+    @NotNull(message = "validation.enum.invalid")
     private EnumCategoriaFiltro enumCategoriaFiltro;
 }

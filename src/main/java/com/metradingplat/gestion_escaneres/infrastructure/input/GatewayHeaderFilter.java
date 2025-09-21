@@ -27,7 +27,7 @@ public class GatewayHeaderFilter extends OncePerRequestFilter {
         String header = request.getHeader("X-Gateway-Passed");
 
         if (header == null || !header.equals("true")) {
-            String mensaje = this.objFuenteMensajes.internacionalizarMensaje("filtro.acceso.gateway.denegado");
+            String mensaje = this.objFuenteMensajes.internacionalizarMensaje("error.access.denied");
             response.sendError(HttpServletResponse.SC_FORBIDDEN, mensaje);
             return;
         }

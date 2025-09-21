@@ -14,7 +14,7 @@ import com.metradingplat.gestion_escaneres.domain.models.Valor;
 import com.metradingplat.gestion_escaneres.domain.models.ValorCondicional;
 import com.metradingplat.gestion_escaneres.domain.models.ValorFloat;
 import com.metradingplat.gestion_escaneres.domain.models.ValorString;
-import com.metradingplat.gestion_escaneres.domain.strategies.ServicioValidacionFiltro;
+import com.metradingplat.gestion_escaneres.domain.strategies.ValidadorParametroFiltro;
 import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class EstrategiaFiltroPercentagePullbackHighsLows implements IEstrategiaF
     private final EnumCategoriaFiltro enumCategoria = EnumCategoriaFiltro.PRECIO_Y_MOVIMIENTO;
 
     @Autowired
-    private ServicioValidacionFiltro objValidador;
+    private ValidadorParametroFiltro objValidador;
 
     @Override
     public EnumFiltro obtenerEnumFiltro() {

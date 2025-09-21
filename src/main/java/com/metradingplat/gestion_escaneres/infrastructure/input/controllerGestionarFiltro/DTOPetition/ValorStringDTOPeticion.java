@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ValorStringDTOPeticion extends ValorDTOPeticion {
-    @NotBlank(message = "valor.string.empty")
+    @NotBlank(message = "validation.parameter.value.required")
     private String valor;
 }

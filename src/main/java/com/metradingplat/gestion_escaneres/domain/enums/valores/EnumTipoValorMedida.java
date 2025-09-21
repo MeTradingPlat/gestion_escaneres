@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum EnumTipoValorMedida implements IEnumValores {
-    PRECIO("tipoValorMedida.precio"),
-    PORCENTAJE("tipoValorMedida.porcentaje");
+    PRECIO("valueType.price"),
+    PORCENTAJE("valueType.percentage");
 
     private final String etiqueta;
 }

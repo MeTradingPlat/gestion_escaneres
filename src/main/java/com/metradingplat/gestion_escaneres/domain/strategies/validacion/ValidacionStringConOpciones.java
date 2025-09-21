@@ -7,7 +7,6 @@ import com.metradingplat.gestion_escaneres.domain.models.ValorString;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ValidacionStringConOpciones<E extends Enum<E> & IEnumValores> implements IValidacionFiltro {
 
@@ -19,22 +18,31 @@ public class ValidacionStringConOpciones<E extends Enum<E> & IEnumValores> imple
 
     @Override
     public Optional<ResultadoValidacion> validar(EnumParametro enumParametro, Valor valor) {
-        if (valor == null || !(valor instanceof ValorString)) {
-            return Optional.of(new ResultadoValidacion("validacion.error.formatoInvalido", enumParametro));
+        if (valor == null) {
+            return resultado("validation.parameter.value.required", enumParametro);
         }
 
-        String valorString = ((ValorString) valor).getValor();
+        if (!(valor instanceof ValorString valorStr)) {
+            return resultado("validation.parameter.type.invalid", enumParametro);
+        }
+
+        String valorTexto = valorStr.getValor();
+
+        if (valorTexto.trim().isEmpty()) {
+            return resultado("validation.parameter.value.required", enumParametro);
+        }
 
         boolean esValido = opcionesPermitidas.stream()
-                .anyMatch(opcion -> opcion.name().equalsIgnoreCase(valorString));
+                .anyMatch(opcion -> opcion.name().equalsIgnoreCase(valorTexto));
 
         if (!esValido) {
-            String opcionesValidas = opcionesPermitidas.stream()
-                    .map(Enum::name)
-                    .collect(Collectors.joining(", "));
-            return Optional.of(new ResultadoValidacion("validacion.error.valorNoPermitido: " + opcionesValidas, enumParametro));
+            return resultado("validation.enum.invalid", enumParametro);
         }
 
         return Optional.empty();
+    }
+
+    private Optional<ResultadoValidacion> resultado(String mensaje, EnumParametro parametro, Object... args) {
+        return Optional.of(new ResultadoValidacion(parametro, mensaje, args));
     }
 }

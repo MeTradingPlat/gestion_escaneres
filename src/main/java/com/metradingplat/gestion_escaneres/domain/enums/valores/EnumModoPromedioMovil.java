@@ -6,10 +6,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum EnumModoPromedioMovil implements IEnumValores {
-    EMA("modoPromedioMovil.ema"),
-    SMA("modoPromedioMovil.sma"),
-    VMA("modoPromedioMovil.vma"),
-    RMA("modoPromedioMovil.rma");
+    EMA("crossLine.ema"),
+    SMA("movingAverageMode.sma"),
+    VMA("movingAverageMode.vma"),
+    RMA("movingAverageMode.rma");
 
     private final String etiqueta;
 }

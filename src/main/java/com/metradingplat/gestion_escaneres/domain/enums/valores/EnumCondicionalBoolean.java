@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EnumCondicionalBoolean implements IEnumValores {
-    VERDADERO("condicion.verdadero"),
-    FALSO("condicion.falso");
+    VERDADERO("condition.true"),
+    FALSO("condition.false");
 
     private final String etiqueta;
 }

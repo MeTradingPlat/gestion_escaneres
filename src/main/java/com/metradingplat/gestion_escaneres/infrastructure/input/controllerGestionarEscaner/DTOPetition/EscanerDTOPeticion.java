@@ -16,23 +16,23 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EscanerDTOPeticion {
-    @NotBlank(message = "escaner.nombre.empty")
-    @Size(min = 3, max = 100, message = "escaner.nombre.size")
+    @NotBlank(message = "validation.scanner.name.required")
+    @Size(min = 3, max = 100, message = "validation.scanner.name.size")
     private String nombre;
 
-    @NotBlank(message = "escaner.descripcion.empty")
-    @Size(min = 5, max = 255, message = "escaner.descripcion.size")
+    @NotBlank(message = "validation.scanner.description.required")
+    @Size(min = 5, max = 255, message = "validation.scanner.description.size")
     private String descripcion;
 
-    @NotNull(message = "escaner.horaInicio.empty")
+    @NotNull(message = "validation.required.field")
     private LocalTime horaInicio;
 
-    @NotNull(message = "escaner.horaFin.empty")
+    @NotNull(message = "validation.required.field")
     private LocalTime horaFin;
 
-    @NotNull(message = "escaner.tiposEjecucion.empty")
+    @NotNull(message = "validation.scanner.executionType.required")
     private TipoEjecucionDTOPeticion objTipoEjecucion;
 
-    @NotNull(message = "escaner.mercados.empty")
+    @NotNull(message = "validation.scanner.market.required")
     private List<MercadoDTOPeticion> mercados;
 }

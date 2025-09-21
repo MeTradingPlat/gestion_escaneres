@@ -5,7 +5,7 @@ import com.metradingplat.gestion_escaneres.application.output.GestionarEscanerGa
 import com.metradingplat.gestion_escaneres.application.output.GestionarEstadoEscanerGatewayIntPort;
 import com.metradingplat.gestion_escaneres.application.output.GestionarFiltroGatewayIntPort;
 import com.metradingplat.gestion_escaneres.domain.strategies.GestorEstrategiaFiltro;
-import com.metradingplat.gestion_escaneres.domain.strategies.ServicioValidacionFiltro;
+import com.metradingplat.gestion_escaneres.domain.strategies.ValidadorParametroFiltro;
 import com.metradingplat.gestion_escaneres.domain.strategies.filtros.IEstrategiaFiltro;
 import com.metradingplat.gestion_escaneres.domain.usecases.GestionarEscanerCUAdapter;
 import com.metradingplat.gestion_escaneres.domain.usecases.GestionarEstadoEscanerCUAdapter;
@@ -45,7 +45,7 @@ public class BeanConfigurations {
     }
 
     @Bean
-    public ServicioValidacionFiltro servicioValidacionFiltro() {
-        return new ServicioValidacionFiltro();
+    public ValidadorParametroFiltro servicioValidacionFiltro() {
+        return new ValidadorParametroFiltro();
     }
 }

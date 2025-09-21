@@ -6,13 +6,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EnumMercado {
-    NYSE("mercado.nyse",1),
-    NASDAQ("mercado.nasdaq",2),
-    AMEX("mercado.amex",3),
-    ETF("mercado.etf",4),
-    OTC("mercado.otc",5);
+    NYSE("market.nyse"),
+    NASDAQ("market.nasdaq"),
+    AMEX("market.amex"),
+    ETF("market.etf"),
+    OTC("market.otc");
 
     private final String etiqueta;
-    private final Integer id;
 }
 

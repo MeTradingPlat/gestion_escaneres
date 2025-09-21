@@ -15,7 +15,7 @@ import com.metradingplat.gestion_escaneres.domain.models.ValorCondicional;
 import com.metradingplat.gestion_escaneres.domain.models.ValorFloat;
 import com.metradingplat.gestion_escaneres.domain.models.ValorInteger;
 import com.metradingplat.gestion_escaneres.domain.models.ValorString;
-import com.metradingplat.gestion_escaneres.domain.strategies.ServicioValidacionFiltro;
+import com.metradingplat.gestion_escaneres.domain.strategies.ValidadorParametroFiltro;
 import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class EstrategiaFiltroVolumeSpike implements IEstrategiaFiltro {
     private final EnumCategoriaFiltro enumCategoria = EnumCategoriaFiltro.VOLUMEN;
 
     @Autowired
-    private ServicioValidacionFiltro objValidador;
+    private ValidadorParametroFiltro objValidador;
 
     @Override
     public EnumFiltro obtenerEnumFiltro() {

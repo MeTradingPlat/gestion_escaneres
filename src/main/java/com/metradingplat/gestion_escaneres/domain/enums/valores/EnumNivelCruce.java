@@ -6,10 +6,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum EnumNivelCruce implements IEnumValores{
-    OPEN("nivelCruce.open"),
-    CLOSE("nivelCruce.close"),
-    VWAP("nivelCruce.vwap"),
-    EMA("nivelCruce.ema");
+    OPEN("crossLevel.open"),
+    CLOSE("crossLevel.close"),
+    VWAP("crossLine.vwap"),
+    EMA("crossLine.ema");
     
     private final String etiqueta;
 }

@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EnumCondicional implements IEnumValores {
-    MAYOR_QUE("condicion.mayor_que"),
-    MENOR_QUE("condicion.menor_que"),
-    ENTRE("condicion.entre"),
-    FUERA("condicion.fuera"),
-    IGUAL_A("condicion.igual_a");
+    MAYOR_QUE("condition.greaterThan"),
+    MENOR_QUE("condition.lessThan"),
+    ENTRE("condition.between"),
+    FUERA("condition.outside"),
+    IGUAL_A("condition.equalTo");
 
     private final String etiqueta;
 }

@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum EnumTipoRol implements IEnumValores {
-    RESISTENCIA("tipoRol.resistencia"),
-    SOPORTE("tipoRol.soporte");
+    RESISTENCIA("roleType.resistance"),
+    SOPORTE("roleType.support");
 
     private final String etiqueta;
 }

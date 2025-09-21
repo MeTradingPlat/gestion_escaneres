@@ -11,7 +11,7 @@ import com.metradingplat.gestion_escaneres.domain.strategies.validacion.IValidac
 import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
 import com.metradingplat.gestion_escaneres.domain.strategies.validacion.*;
 
-public class ServicioValidacionFiltro {
+public class ValidadorParametroFiltro {
 
     public Optional<ResultadoValidacion> validarCondicional(EnumParametro enumParametro, Valor valor, Float min, Float max){
         IValidacionFiltro objValidacion = new ValidacionCondicional(min, max);

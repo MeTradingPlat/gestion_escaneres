@@ -36,7 +36,7 @@ public class EscanerRestController {
 
     @PostMapping
     public ResponseEntity<EscanerDTORespuesta> crearEscaner(
-            @RequestBody @Valid @NotNull(message = "escaner.peticion.empty") EscanerDTOPeticion peticion) {
+            @RequestBody @Valid @NotNull(message = "validation.scanner.request.required") EscanerDTOPeticion peticion) {
         Escaner creado = this.objGestionarEscanerCUInt.crearEscaner(objMapper.mappearDePeticionAEscaner(peticion));
         EscanerDTORespuesta dtoRespuesta = this.objMapper.mappearDeEscanerARespuesta(creado);
         this.objFuenteMensajes.internacionalizarEscaner(dtoRespuesta);
@@ -45,7 +45,7 @@ public class EscanerRestController {
 
     @GetMapping("/{id}")
     public ResponseEntity<EscanerDTORespuesta> obtenerEscanerPorId(
-            @PathVariable("id") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long id) {
+            @PathVariable("id") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long id) {
         Escaner escaner = this.objGestionarEscanerCUInt.obtenerEscanerPorId(id);
         EscanerDTORespuesta dtoRespuesta = this.objMapper.mappearDeEscanerARespuesta(escaner);
         this.objFuenteMensajes.internacionalizarEscaner(dtoRespuesta);
@@ -68,8 +68,8 @@ public class EscanerRestController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EscanerDTORespuesta> actualizarEscaner(
-            @PathVariable("id") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long id,
-            @RequestBody @Valid @NotNull(message = "escaner.peticion.empty") EscanerDTOPeticion peticion) {
+            @PathVariable("id") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long id,
+            @RequestBody @Valid @NotNull(message = "validation.scanner.request.required") EscanerDTOPeticion peticion) {
         Escaner actualizado = this.objMapper.mappearDePeticionAEscaner(peticion);
         actualizado.setIdEscaner(id);
         Escaner escaner = this.objGestionarEscanerCUInt.actualizarEscaner(actualizado);
@@ -80,7 +80,7 @@ public class EscanerRestController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean > eliminarEscaner(
-            @PathVariable("id") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long id) {
+            @PathVariable("id") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long id) {
         Boolean  esEliminado = this.objGestionarEscanerCUInt.eliminarEscaner(id);
         return ResponseEntity.ok(esEliminado);
     }

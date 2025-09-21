@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum EnumOpcionExtremo implements IEnumValores {
-    HIGH("opcionExtremo.high"),
-    LOW("opcionExtremo.low");
+    HIGH("extremeOption.high"),
+    LOW("extremeOption.low");
 
     private final String etiqueta;
 }

@@ -8,7 +8,6 @@ import com.metradingplat.gestion_escaneres.domain.enums.EnumMercado;
 @Getter
 @Setter
 public class MercadoDTOPeticion {
-    @NotNull(message = "escaner.mercado.enum.empty")
+    @NotNull(message = "validation.enum.invalid")
     private EnumMercado enumMercado;
 }
-

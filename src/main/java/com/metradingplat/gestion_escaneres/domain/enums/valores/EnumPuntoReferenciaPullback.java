@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EnumPuntoReferenciaPullback implements IEnumValores{
-    ALTO("puntoReferenciaPullback.alto"),
-    BAJO("puntoReferenciaPullback.bajo");
+    ALTO("extremeOption.high"),
+    BAJO("extremeOption.low");
 
     private final String etiqueta;
 }

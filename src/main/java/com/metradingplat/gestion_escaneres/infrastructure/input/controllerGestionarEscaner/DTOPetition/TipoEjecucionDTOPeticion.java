@@ -12,6 +12,6 @@ import com.metradingplat.gestion_escaneres.domain.enums.EnumTipoEjecucion;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TipoEjecucionDTOPeticion {
-    @NotNull(message = "tipoEjecucion.empty")
+    @NotNull(message = "validation.enum.invalid")
     private EnumTipoEjecucion enumTipoEjecucion;
 }

@@ -20,14 +20,13 @@ public class GestionarEscanerCUAdapter implements GestionarEscanerCUIntPort {
     @Override
     public Escaner crearEscaner(Escaner objEscaner) {
         if (this.objGestionarEscanerGatewayIntPort.existeEscanerPorNombre(objEscaner.getNombre())) {
-            this.objFormateadorResultadosIntPort.errorEntidadYaExiste("escaner.nombre.yaExiste", objEscaner.getNombre());
+            this.objFormateadorResultadosIntPort.errorEntidadYaExiste("validation.scanner.name.exists");
         }
         if (objEscaner.getHoraInicio().isAfter(objEscaner.getHoraFin())) {
-            this.objFormateadorResultadosIntPort.errorReglaNegocioViolada("escaner.horas.invalidas",
-                    objEscaner.getHoraInicio(), objEscaner.getHoraFin());
+            this.objFormateadorResultadosIntPort.errorReglaNegocioViolada("validation.scanner.schedule.invalid");
         }
         if (objEscaner.getMercados() == null || objEscaner.getMercados().isEmpty()) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("escaner.mercados.empty");
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.market.required");
         }
         Escaner escanerGuardado = this.objGestionarEscanerGatewayIntPort.crearEscaner(objEscaner);
         escanerGuardado.setObjEstado(this.objGestionarEstadoEscanerGatewayIntPort
@@ -38,7 +37,7 @@ public class GestionarEscanerCUAdapter implements GestionarEscanerCUIntPort {
     @Override
     public Escaner obtenerEscanerPorId(Long idEscaner) {
         if (!this.objGestionarEscanerGatewayIntPort.existeEscanerPorId(idEscaner)) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("escaner.id.noEncontrado", idEscaner);
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.id.notFound", idEscaner);
         }
         return this.objGestionarEscanerGatewayIntPort.obtenerEscanerPorId(idEscaner);
     }
@@ -56,20 +55,19 @@ public class GestionarEscanerCUAdapter implements GestionarEscanerCUIntPort {
     @Override
     public Escaner actualizarEscaner(Escaner objEscaner) {
         if (!this.objGestionarEscanerGatewayIntPort.existeEscanerPorId(objEscaner.getIdEscaner())) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("escaner.id.noEncontrado", objEscaner.getIdEscaner());
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.id.notFound", objEscaner.getIdEscaner());
         }
         if (this.objGestionarEscanerGatewayIntPort.existeEscanerPorNombre(objEscaner.getIdEscaner(), objEscaner.getNombre())) {
-            this.objFormateadorResultadosIntPort.errorEntidadYaExiste("escaner.nombre.yaExiste", objEscaner.getNombre());
+            this.objFormateadorResultadosIntPort.errorEntidadYaExiste("validation.scanner.name.exists");
         }
         if (objEscaner.getHoraInicio().isAfter(objEscaner.getHoraFin())) {
-            this.objFormateadorResultadosIntPort.errorReglaNegocioViolada("escaner.horas.invalidas",
-                    objEscaner.getHoraInicio(), objEscaner.getHoraFin());
+            this.objFormateadorResultadosIntPort.errorReglaNegocioViolada("validation.scanner.schedule.invalid");
         }
         if (objEscaner.getObjTipoEjecucion() == null) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("escaner.tiposEjecucion.empty");
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.executionType.required");
         }
         if (objEscaner.getMercados() == null || objEscaner.getMercados().isEmpty()) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("escaner.mercados.empty");
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.market.required");
         }
         return this.objGestionarEscanerGatewayIntPort.actualizarEscaner(objEscaner);
     }
@@ -77,7 +75,7 @@ public class GestionarEscanerCUAdapter implements GestionarEscanerCUIntPort {
     @Override
     public Boolean eliminarEscaner(Long idEscaner) {
         if (!this.objGestionarEscanerGatewayIntPort.existeEscanerPorId(idEscaner)) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("escaner.id.noEncontrado", idEscaner);
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.id.notFound", idEscaner);
         }
         Boolean respuesta = this.objGestionarEscanerGatewayIntPort.eliminarEscaner(idEscaner);
         return respuesta;

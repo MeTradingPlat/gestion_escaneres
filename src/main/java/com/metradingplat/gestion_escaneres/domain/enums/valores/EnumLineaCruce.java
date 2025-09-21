@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum EnumLineaCruce implements IEnumValores{
-    VWAP("lineaCruce.vwap"),
-    EMA("lineaCruce.ema");
+    VWAP("crossLine.vwap"),
+    EMA("crossLine.ema");
     
     private final String etiqueta;
 }

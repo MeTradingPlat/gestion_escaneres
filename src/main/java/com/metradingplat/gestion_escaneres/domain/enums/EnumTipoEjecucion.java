@@ -6,9 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EnumTipoEjecucion {
-    UNA_VEZ("escaner.tipoEjecucion.una_vez", 1),
-    DIARIA("escaner.tipoEjecucion.diaria", 2),;
+    UNA_VEZ("execution.once"),
+    DIARIA("execution.daily"),;
 
     private final String etiqueta;
-    private final Integer id;
 }

@@ -13,10 +13,10 @@ import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ParametroDTOPeticion {
-    @NotNull(message = "parametro.enumParametro.empty")
+    @NotNull(message = "validation.enum.invalid")
     private EnumParametro enumParametro;
 
-    @NotNull(message = "parametro.objValorSeleccionado.empty")
+    @NotNull(message = "validation.parameter.value.required")
     @Valid
     private ValorDTOPeticion objValorSeleccionado;
 }

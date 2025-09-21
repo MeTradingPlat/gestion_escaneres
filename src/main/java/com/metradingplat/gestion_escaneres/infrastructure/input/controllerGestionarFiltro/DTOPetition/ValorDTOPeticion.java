@@ -21,6 +21,6 @@ import com.metradingplat.gestion_escaneres.domain.enums.EnumTipoValor;
         @JsonSubTypes.Type(value = ValorCondicionalDTOPeticion.class, name = "CONDICIONAL")
 })
 public class ValorDTOPeticion {
-    @NotNull(message = "valor.enumTipoValor.empty")
+    @NotNull(message = "validation.enum.invalid")
     private EnumTipoValor enumTipoValor;
 }

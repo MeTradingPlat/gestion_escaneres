@@ -15,10 +15,10 @@ import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FiltroDtoPeticion {
-    @NotNull(message = "filtro.enumFiltro.empty")
+    @NotNull(message = "filtro.enum.empty")
     private EnumFiltro enumFiltro;
 
-    @NotNull(message = "filtro.parametros.empty")
+    @NotNull(message = "validation.filter.parameters.required")
     @Valid
     private List<ParametroDTOPeticion> parametros;
 }

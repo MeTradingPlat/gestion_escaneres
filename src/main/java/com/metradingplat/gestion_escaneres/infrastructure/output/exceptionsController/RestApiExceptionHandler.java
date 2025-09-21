@@ -3,6 +3,7 @@ package com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsCont
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import com.metradingplat.gestion_escaneres.application.output.FuenteMensajesIntPort;
+import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.exceptionStructure.CodigoError;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.exceptionStructure.Error;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.exceptionStructure.ErrorUtils;
@@ -25,126 +26,112 @@ public class RestApiExceptionHandler {
     private final FuenteMensajesIntPort objFuenteMensajes;
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Error> handleGenericException(HttpServletRequest req,
-                                                        Exception ex) {
-
-        String mensaje = this.objFuenteMensajes.internacionalizarMensaje(CodigoError.ERROR_GENERICO.getLlaveMensaje());
-
-        final Error error = ErrorUtils.crearError(
-                CodigoError.ERROR_GENERICO.getCodigo(),
-                mensaje,
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                req.getRequestURL().toString(),
-                req.getMethod()
+    public ResponseEntity<Error> handleGenericException(HttpServletRequest req, Exception ex) {
+        return createErrorResponse(
+            CodigoError.ERROR_GENERICO,
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            req,
+            CodigoError.ERROR_GENERICO.getLlaveMensaje()
         );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-    }
-
-    @ExceptionHandler(EntidadYaExisteException.class)
-    public ResponseEntity<Error> handleEntidadYaExisteException(final HttpServletRequest req,
-                                                                final EntidadYaExisteException ex) {
-        
-        Object[] args = (ex.getArgs() == null) ? new Object[]{} : ex.getArgs();
-        String mensaje = String.format(
-                "%s, %s",
-                this.objFuenteMensajes.internacionalizarMensaje(CodigoError.ENTIDAD_YA_EXISTE.getLlaveMensaje()),
-                this.objFuenteMensajes.internacionalizarMensaje(ex.getMessage(),args)
-        );
-
-        final Error error = ErrorUtils.crearError(
-                CodigoError.ENTIDAD_YA_EXISTE.getCodigo(),
-                mensaje,
-                HttpStatus.NOT_ACCEPTABLE.value(),
-                req.getRequestURL().toString(),
-                req.getMethod()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error);
-    }
-
-    @ExceptionHandler(EntidadNoExisteException.class)
-    public ResponseEntity<Error> handleEntidadNoExisteException(EntidadNoExisteException ex,
-                                                                HttpServletRequest req) {
-  
-        Object[] args = (ex.getArgs() == null) ? new Object[]{} : ex.getArgs();
-        String mensaje = String.format(
-                "%s, %s",
-                this.objFuenteMensajes.internacionalizarMensaje(CodigoError.ENTIDAD_NO_ENCONTRADA.getLlaveMensaje()),
-                this.objFuenteMensajes.internacionalizarMensaje(ex.getMessage(),args)
-        );
-
-        final Error error = ErrorUtils.crearError(
-                CodigoError.ENTIDAD_NO_ENCONTRADA.getCodigo(),
-                mensaje,
-                HttpStatus.NOT_ACCEPTABLE.value(),
-                req.getRequestURL().toString(),
-                req.getMethod()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(error);
-    }
-
-    @ExceptionHandler(ReglaNegocioException.class)
-    public ResponseEntity<Error> handleReglaNegocioExcepcion(ReglaNegocioException ex,
-                                                                HttpServletRequest req) {
-  
-        Object[] args = (ex.getArgs() == null) ? new Object[]{} : ex.getArgs();
-        String mensaje = String.format(
-                "%s, %s",
-                this.objFuenteMensajes.internacionalizarMensaje(CodigoError.VIOLACION_REGLA_DE_NEGOCIO.getLlaveMensaje()),
-                this.objFuenteMensajes.internacionalizarMensaje(ex.getMessage(),args)
-        );
-
-        final Error error = ErrorUtils.crearError(
-                CodigoError.VIOLACION_REGLA_DE_NEGOCIO.getCodigo(),
-                mensaje,
-                HttpStatus.BAD_REQUEST.value(),
-                req.getRequestURL().toString(),
-                req.getMethod()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
-
-    @ExceptionHandler(EstadoDenegadoException.class)
-    public ResponseEntity<Error> handleEstadoDenegadoException(EstadoDenegadoException ex,
-                                                                HttpServletRequest req) {
-  
-        Object[] args = (ex.getArgs() == null) ? new Object[]{} : ex.getArgs();
-        String mensaje = String.format(
-                "%s, %s",
-                this.objFuenteMensajes.internacionalizarMensaje(CodigoError.VIOLACION_REGLA_DE_NEGOCIO.getLlaveMensaje()),
-                this.objFuenteMensajes.internacionalizarMensaje(ex.getMessage(),args)
-        );
-        final Error error = ErrorUtils.crearError(
-                CodigoError.VIOLACION_REGLA_DE_NEGOCIO.getCodigo(),
-                mensaje,
-                HttpStatus.BAD_REQUEST.value(),
-                req.getRequestURL().toString(),
-                req.getMethod()
-        );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-    }
-    
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errores = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String campo = ((FieldError) error).getField();
-            Object[] args = error.getArguments();
-            String llaveMensaje = error.getDefaultMessage();
-            String mensajeDeError = this.objFuenteMensajes.internacionalizarMensaje(llaveMensaje,args);
-            errores.put(campo, mensajeDeError);
-        });
-        return new ResponseEntity<>(errores, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<Map<String, String>> handleTypeMismatch(MethodArgumentTypeMismatchException ex,
-                                                                  HttpServletRequest req) {
-        
-        Map<String, String> error = new HashMap<>();
-        String campo = ex.getName();
-        String mensaje = this.objFuenteMensajes.internacionalizarMensaje("validacion.tipo.invalida");
-        error.put(campo, mensaje);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    public ResponseEntity<Error> handleTypeMismatch(MethodArgumentTypeMismatchException ex, HttpServletRequest req) {
+        return createErrorResponse(
+            CodigoError.TIPO_DE_ARGUMENTO_INVALIDO,
+            HttpStatus.BAD_REQUEST,
+            req,
+            CodigoError.TIPO_DE_ARGUMENTO_INVALIDO.getLlaveMensaje()
+        );
     }
 
+    @ExceptionHandler(EntidadYaExisteException.class)
+    public ResponseEntity<Error> handleEntidadYaExisteException(final HttpServletRequest req, final EntidadYaExisteException ex) {
+        return createErrorResponse(
+            CodigoError.ENTIDAD_YA_EXISTE,
+            HttpStatus.NOT_ACCEPTABLE,
+            req,
+            ex.getMessage(),
+            ex.getArgs()
+        );
+    }
+
+    @ExceptionHandler(EntidadNoExisteException.class)
+    public ResponseEntity<Error> handleEntidadNoExisteException(EntidadNoExisteException ex, HttpServletRequest req) {
+        return createErrorResponse(
+            CodigoError.ENTIDAD_NO_ENCONTRADA,
+            HttpStatus.NOT_ACCEPTABLE,
+            req,
+            ex.getMessage(),
+            ex.getArgs()
+        );
+    }
+
+    @ExceptionHandler(ReglaNegocioException.class)
+    public ResponseEntity<Error> handleReglaNegocioExcepcion(ReglaNegocioException ex, HttpServletRequest req) {
+        return createErrorResponse(
+            CodigoError.VIOLACION_REGLA_DE_NEGOCIO,
+            HttpStatus.BAD_REQUEST,
+            req,
+            ex.getMessage(),
+            ex.getArgs()
+        );
+    }
+
+    @ExceptionHandler(EstadoDenegadoException.class)
+    public ResponseEntity<Error> handleEstadoDenegadoException(EstadoDenegadoException ex, HttpServletRequest req) {
+        return createErrorResponse(
+            CodigoError.VIOLACION_REGLA_DE_NEGOCIO,
+            HttpStatus.BAD_REQUEST,
+            req,
+            ex.getMessage(),
+            ex.getArgs()
+        );
+    }
+
+    @ExceptionHandler(ValidacionFiltroException.class)
+    public ResponseEntity<Map<EnumParametro, String>> handleValidationFiltroExceptions(ValidacionFiltroException ex, HttpServletRequest req) {
+        Map<EnumParametro, String> errores = new HashMap<>();
+
+        ex.getErroresValidacion().forEach(errorValidacion -> {
+            String mensaje = internacionalizarMensaje(errorValidacion.mensaje(), errorValidacion.args());
+            errores.put(errorValidacion.enumParametro(), mensaje);
+        });
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errores = new HashMap<>();
+        
+        ex.getBindingResult().getAllErrors().forEach(error -> {
+            String campo = ((FieldError) error).getField();
+            String mensajeDeError = internacionalizarMensaje(error.getDefaultMessage(), error.getArguments());
+            errores.put(campo, mensajeDeError);
+        });
+        
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+    }
+
+    
+    private ResponseEntity<Error> createErrorResponse(CodigoError codigoError, HttpStatus httpStatus, 
+                                                     HttpServletRequest req, String mensajeClave, Object... args) {
+        String mensaje = internacionalizarMensaje(mensajeClave, args);
+        
+        Error error = ErrorUtils.crearError(
+            codigoError.getCodigo(),
+            mensaje,
+            httpStatus.value(),
+            req.getRequestURL().toString(),
+            req.getMethod()
+        );
+        
+        return ResponseEntity.status(httpStatus).body(error);
+    }
+
+    private String internacionalizarMensaje(String claveMensaje, Object... args) {
+        Object[] argumentos = (args == null || args.length == 0) ? new Object[]{} : args;
+        return this.objFuenteMensajes.internacionalizarMensaje(claveMensaje, argumentos);
+    }
 }

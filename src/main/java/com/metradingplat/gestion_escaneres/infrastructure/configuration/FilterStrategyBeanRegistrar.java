@@ -32,7 +32,6 @@ public class FilterStrategyBeanRegistrar implements BeanDefinitionRegistryPostPr
                     registry.registerBeanDefinition(strategyClass.getSimpleName(), new RootBeanDefinition(strategyClass));
                 }
             } catch (ClassNotFoundException e) {
-                // Handle exception, e.g., log it
                 System.err.println("Could not load class: " + beanClassName + " - " + e.getMessage());
             }
         }

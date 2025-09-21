@@ -12,7 +12,7 @@ import com.metradingplat.gestion_escaneres.domain.models.Filtro;
 import com.metradingplat.gestion_escaneres.domain.models.Parametro;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
 import com.metradingplat.gestion_escaneres.domain.models.ValorString;
-import com.metradingplat.gestion_escaneres.domain.strategies.ServicioValidacionFiltro;
+import com.metradingplat.gestion_escaneres.domain.strategies.ValidadorParametroFiltro;
 import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class EstrategiaFiltroNewCandleHighLow implements IEstrategiaFiltro {
     private final EnumCategoriaFiltro enumCategoria = EnumCategoriaFiltro.TIEMPO_Y_PATRONES_DE_PRECIO;
 
     @Autowired
-    private ServicioValidacionFiltro objValidador;
+    private ValidadorParametroFiltro objValidador;
 
     @Override
     public EnumFiltro obtenerEnumFiltro() {

@@ -42,7 +42,7 @@ public class GestionarFiltroCUAdapter implements GestionarFiltroCUIntPort {
     public List<Filtro> obtenerFiltrosPorCategoria(EnumCategoriaFiltro enumCategoria){
         List<EnumFiltro> enumsFiltro = this.objGestorFactoryFiltro.obtenerFiltrosPorCategoria(enumCategoria);
         if (enumsFiltro.size() == 1 && enumsFiltro.get(0) == EnumFiltro.UNKNOWN) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("filtros.enumCategoria.noEncontrado", enumCategoria);
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.filter.category.notFound");
         }
         return enumsFiltro.stream()
             .map(this.objGestorFactoryFiltro::obtenerInfomracionFiltro)
@@ -52,7 +52,7 @@ public class GestionarFiltroCUAdapter implements GestionarFiltroCUIntPort {
     @Override
     public Filtro obtenerFiltroPorDefecto(EnumFiltro enumFiltro){
         if (!this.objGestorFactoryFiltro.validarEnumFiltro(enumFiltro)) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("filtros.enumFiltro.noEncontrado", enumFiltro);
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.filter.type.notFound");
         }
         return this.objGestorFactoryFiltro.obtenerFiltroConValoresPorDefecto(enumFiltro);
     }
@@ -60,7 +60,7 @@ public class GestionarFiltroCUAdapter implements GestionarFiltroCUIntPort {
     @Override
     public List<Filtro> obtenerFiltros(Long idEscaner){
         if (!this.objGestionarEscanerGatewayIntPort.existeEscanerPorId(idEscaner)){
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("filtros.escaner.noEncontrado", idEscaner);
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.id.notFound", idEscaner);
         }
         return this.objGestionarFiltroGatewayIntPort.obtenerFiltrosGuardados(idEscaner);
     }
@@ -69,29 +69,14 @@ public class GestionarFiltroCUAdapter implements GestionarFiltroCUIntPort {
     public List<Filtro> guardarFiltros(Long idEscaner, List<Filtro> filtros) {
         List<ResultadoValidacion> errores = new ArrayList<ResultadoValidacion>();
         if (!this.objGestionarEscanerGatewayIntPort.existeEscanerPorId(idEscaner)) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("filtros.escaner.noEncontrado", idEscaner);
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.id.notFound", idEscaner);
         }
         for (Filtro filtro : filtros) {
-            System.out.println("Filtro: " + filtro.getEnumFiltro() 
-            + " tiene " + (filtro.getParametros() == null ? "null" : filtro.getParametros().size()) + " parámetros");
-
-            if (filtro.getParametros() != null) {
-                for (Parametro p : filtro.getParametros()) {
-                    System.out.println("Parametro=" + p.getEnumParametro() 
-                        + ", valor=" + (p.getObjValorSeleccionado() == null ? "null" : p.getObjValorSeleccionado().getClass().getName()));
-                }
-            }
-
-
             Map<EnumParametro, Valor> valoresSeleccionados = filtro.getParametros().stream()
                     .collect(Collectors.toMap(
                             Parametro::getEnumParametro,
                             Parametro::getObjValorSeleccionado
                     ));
-            valoresSeleccionados.forEach((k, v) -> {
-                System.out.println("Parametro=" + k + ", clase=" + (v == null ? "null" : v.getClass().getName()));
-            });
-
             errores.addAll(this.objGestorFactoryFiltro.validarValoresSeleccionados(
                     filtro.getEnumFiltro(),
                     valoresSeleccionados
@@ -106,7 +91,7 @@ public class GestionarFiltroCUAdapter implements GestionarFiltroCUIntPort {
 
     public Boolean eliminarFitroGuardado(Long idFiltro){
         if (!this.objGestionarFiltroGatewayIntPort.existeFiltroPorId(idFiltro)) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("filtros.filtro.noEncontrado", idFiltro);
+            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.filter.id.notFound", idFiltro);
         }
         return this.objGestionarFiltroGatewayIntPort.eliminarFiltro(idFiltro);
     }

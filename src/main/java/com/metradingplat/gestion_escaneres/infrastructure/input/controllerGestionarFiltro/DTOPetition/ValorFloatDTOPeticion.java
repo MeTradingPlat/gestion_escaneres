@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ValorFloatDTOPeticion extends ValorDTOPeticion {
-    @NotNull(message = "valor.float.empty")
+    @NotNull(message = "validation.parameter.value.required")
     private Float valor;
 }

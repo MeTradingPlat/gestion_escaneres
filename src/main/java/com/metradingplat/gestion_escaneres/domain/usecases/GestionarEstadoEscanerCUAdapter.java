@@ -23,7 +23,7 @@ public class GestionarEstadoEscanerCUAdapter implements GestionarEstadoEscanerCU
         Escaner escaner = validarEscanerExistente(id);
 
         if (escaner.getFiltros() == null || escaner.getFiltros().isEmpty()) {
-            this.objFormateadorResultados.errorReglaNegocioViolada("escaner.sinFiltros");
+            this.objFormateadorResultados.errorReglaNegocioViolada("validation.scanner.filters.required");
         }
 
         return cambiarEstado(escaner, EnumEstadoEscaner.INICIADO);
@@ -46,7 +46,7 @@ public class GestionarEstadoEscanerCUAdapter implements GestionarEstadoEscanerCU
 
     private Escaner validarEscanerExistente(Long id) {
         if (!this.objGestionarEscanerGatewayIntPort.existeEscanerPorId(id)) {
-            this.objFormateadorResultados.errorEntidadNoExiste("escaner.id.noExiste", id);
+            this.objFormateadorResultados.errorEntidadNoExiste("validation.scanner.id.notFound", id);
         }
         return this.objGestionarEscanerGatewayIntPort.obtenerEscanerPorId(id);
     }

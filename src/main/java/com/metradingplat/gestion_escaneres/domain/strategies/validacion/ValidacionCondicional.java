@@ -20,7 +20,7 @@ public class ValidacionCondicional implements IValidacionFiltro {
     @Override
     public Optional<ResultadoValidacion> validar(EnumParametro enumParametro, Valor valor) {
         if (!(valor instanceof ValorCondicional vc)) {
-            return resultado("filtro.parametro.tipoInvalido", enumParametro);
+            return resultado("validation.parameter.type.invalid", enumParametro);
         }
 
         Float v1 = toFloat(vc.getValor1());
@@ -28,23 +28,25 @@ public class ValidacionCondicional implements IValidacionFiltro {
 
         if (cond == EnumCondicional.ENTRE || cond == EnumCondicional.FUERA) {
             if (vc.getValor2() == null) {
-                return resultado("filtro.parametro.valorInvalido", enumParametro);
+                return resultado("validation.parameter.secondValue.required", enumParametro);
             }
 
             Float v2 = toFloat(vc.getValor2());
 
-            if ((cond == EnumCondicional.ENTRE && v1 >= v2) ||
-                (cond == EnumCondicional.FUERA && v1 <= v2)) {
-                return resultado("filtro.parametro.rangoInvalido", enumParametro);
+            if (cond == EnumCondicional.ENTRE && v1 >= v2){
+                return resultado("validation.parameter.values.orderInvalid.between", enumParametro, v1, v2);
+            }
+            if (cond == EnumCondicional.FUERA && v1 <= v2) {
+                return resultado("validation.parameter.values.orderInvalid.outside", enumParametro, v1, v2);
             }
 
             if (v1 < min || v2 > max) {
-                return resultado("filtro.parametro.fueraDeRango", enumParametro);
+                return resultado("validation.parameter.values.outOfRange", enumParametro, min, max);
             }
 
         } else {
             if (v1 < min || v1 > max) {
-                return resultado("filtro.parametro.fueraDeRango", enumParametro);
+                return resultado("validation.parameter.values.outOfRange", enumParametro, min, max);
             }
         }
 
@@ -59,7 +61,7 @@ public class ValidacionCondicional implements IValidacionFiltro {
         };
     }
 
-    private Optional<ResultadoValidacion> resultado(String mensaje, EnumParametro parametro) {
-        return Optional.of(new ResultadoValidacion(mensaje, parametro));
+    private Optional<ResultadoValidacion> resultado(String mensaje, EnumParametro parametro, Object... args) {
+        return Optional.of(new ResultadoValidacion(parametro, mensaje, args));
     }
 }

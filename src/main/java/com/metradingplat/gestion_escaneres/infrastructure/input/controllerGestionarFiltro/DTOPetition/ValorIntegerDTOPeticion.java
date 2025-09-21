@@ -11,6 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ValorIntegerDTOPeticion extends ValorDTOPeticion {
-    @NotNull(message = "valor.integer.empty")
+    @NotNull(message = "validation.parameter.value.required")
     private Integer valor;
 }

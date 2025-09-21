@@ -29,7 +29,7 @@ public class EstadoEscanerRestController {
 
     @PostMapping("/{id}/iniciar")
     public ResponseEntity<EstadoEscanerDTORespuesta> iniciarEscaner(
-            @PathVariable("id") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long id) {
+            @PathVariable("id") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long id) {
         EstadoEscaner estado = this.objGestionarEstadoEscanerCUInt.iniciarEscaner(id);
         EstadoEscanerDTORespuesta dto = objMapper.mappearDeEstadoEscanerARespuesta(estado);
         return ResponseEntity.ok(dto);
@@ -37,7 +37,7 @@ public class EstadoEscanerRestController {
 
     @PostMapping("/{id}/detener")
     public ResponseEntity<EstadoEscanerDTORespuesta> detenerEscaner(
-            @PathVariable("id") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long id) {
+            @PathVariable("id") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long id) {
         EstadoEscaner estado = this.objGestionarEstadoEscanerCUInt.detenerEscaner(id);
         EstadoEscanerDTORespuesta dto = objMapper.mappearDeEstadoEscanerARespuesta(estado);
         return ResponseEntity.ok(dto);
@@ -45,7 +45,7 @@ public class EstadoEscanerRestController {
 
     @PostMapping("/{id}/archivar")
     public ResponseEntity<EstadoEscanerDTORespuesta> archivarEscaner(
-            @PathVariable("id") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long id) {
+            @PathVariable("id") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long id) {
         EstadoEscaner estado = this.objGestionarEstadoEscanerCUInt.archivarEscaner(id);
         EstadoEscanerDTORespuesta dto = objMapper.mappearDeEstadoEscanerARespuesta(estado);
         return ResponseEntity.ok(dto);
@@ -53,7 +53,7 @@ public class EstadoEscanerRestController {
 
     @PostMapping("/{id}/desarchivar")
     public ResponseEntity<EstadoEscanerDTORespuesta> desarchivarEscaner(
-            @PathVariable("id") @NotNull(message = "escaner.id.empty") @Positive(message = "escaner.id.positive") Long id) {
+            @PathVariable("id") @NotNull(message = "validation.type.positive.required") @Positive(message = "validation.type.positive.required") Long id) {
         EstadoEscaner estado = this.objGestionarEstadoEscanerCUInt.desarchivarEscaner(id);
         EstadoEscanerDTORespuesta dto = objMapper.mappearDeEstadoEscanerARespuesta(estado);
         return ResponseEntity.ok(dto);

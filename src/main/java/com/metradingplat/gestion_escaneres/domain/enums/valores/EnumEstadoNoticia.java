@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum EnumEstadoNoticia implements IEnumValores{
-    COMPRA("noticia.estado.compra"),
-    VENTA("noticia.estado.venta"),
-    NINGUNA("noticia.estado.ninguna");
+    COMPRA("news.state.buy"),
+    VENTA("news.state.sell"),
+    NINGUNA("news.state.none");
 
     private final String etiqueta;
 }
