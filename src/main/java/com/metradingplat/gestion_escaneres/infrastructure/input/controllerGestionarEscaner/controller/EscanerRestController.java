@@ -24,6 +24,7 @@ import com.metradingplat.gestion_escaneres.domain.models.Escaner;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOAnswer.EscanerDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOPetition.EscanerDTOPeticion;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.mapper.EscanerMapperInfraestructuraDominio;
+
 @RestController
 @RequestMapping("/api/escaner")
 @RequiredArgsConstructor
