@@ -9,23 +9,27 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-
     env:
       MYSQL_USER: ${{ secrets.MYSQL_USER }}
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
     steps:
+      - name: Create Docker Network
+        run: |
+          sudo docker network create metradingplat-network || echo "Network already exists"
+
       - name: Pull Docker Image
         run: sudo docker pull virtud142/metradingplat_gestion_escaneres:latest
 
       - name: Delete Old Docker Container
-        run: sudo docker rm -f metradingplat_gestion_escaneres-container || true
+        run: sudo docker rm -f gestion_escaneres || true
 
-      - name: Run Docker Container with secrets
+      - name: Run Docker Container with Network
         run: |
           sudo docker run -d \
             -p 8081:8081 \
-            --name metradingplat_gestion_escaneres-container \
+            --name gestion_escaneres \
+            --network metradingplat-network \
             -e MYSQL_USER="${{ secrets.MYSQL_USER }}" \
             -e MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \
             virtud142/metradingplat_gestion_escaneres:latest
