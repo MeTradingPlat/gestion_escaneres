@@ -33,3 +33,6 @@ jobs:
             -e MYSQL_USER="${{ secrets.MYSQL_USER }}" \
             -e MYSQL_PASSWORD="${{ secrets.MYSQL_PASSWORD }}" \
             virtud142/metradingplat_gestion_escaneres:latest
+
+      - name: Remove Dangling Docker Images
+        run: sudo docker image prune -f
