@@ -92,10 +92,11 @@ public class EstrategiaFiltroVolume implements IEstrategiaFiltro {
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.INTEGER;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(), enumTipoValor);
+        EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
-            EnumCondicional.MAYOR_QUE.getEtiqueta(),
+            enumCondicional.getEtiqueta(),
             enumTipoValor,
-            EnumCondicional.MAYOR_QUE,
+            enumCondicional,
             valorUsuario != null ? valorUsuario.getValor1() : 100_000,
             valorUsuario != null ? valorUsuario.getValor2() : 5_000_000
         );
@@ -105,10 +106,11 @@ public class EstrategiaFiltroVolume implements IEstrategiaFiltro {
     private Parametro crearParametroTipoVolumen(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTipoVolumen.values(), enumTipoValor);
+        EnumTipoVolumen enumValor = valorUsuario != null ? EnumTipoVolumen.valueOf(valorUsuario.getValor()) : EnumTipoVolumen.CIERRE;
         ValorString valor = new ValorString(
-            EnumTipoVolumen.CIERRE.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTipoVolumen.CIERRE.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIPO_VOLUMEN, EnumParametro.TIPO_VOLUMEN.getEtiqueta(), valor, opciones);
     }
@@ -116,10 +118,11 @@ public class EstrategiaFiltroVolume implements IEstrategiaFiltro {
     private Parametro crearParametroTimeframe(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTimeframe.values(), enumTipoValor);
+        EnumTimeframe enumValor = valorUsuario != null ? EnumTimeframe.valueOf(valorUsuario.getValor()) : EnumTimeframe._1D;
         ValorString valor = new ValorString(
-            EnumTimeframe._1D.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTimeframe._1D.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIMEFRAME_VOLUME, EnumParametro.TIMEFRAME_VOLUME.getEtiqueta(), valor, opciones);
     }

@@ -85,9 +85,10 @@ public class EscanerEntity {
     private List<MercadoEntity> mercados = new ArrayList<>();
 
     @OneToMany(
-        fetch = FetchType.LAZY, 
-        mappedBy = "objEscaner", 
-        cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}
+        fetch = FetchType.LAZY,
+        mappedBy = "objEscaner",
+        cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE},
+        orphanRemoval = true
     )
     private List<FiltroEntity> filtros = new ArrayList<>();
 

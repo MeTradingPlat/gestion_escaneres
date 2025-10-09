@@ -13,5 +13,4 @@ public interface GestionarFiltroCUIntPort {
     public Filtro obtenerFiltroPorDefecto(EnumFiltro enumFiltro);
     public List<Filtro> obtenerFiltros(Long idEscaner);
     public List<Filtro> guardarFiltros(Long idEscaner, List<Filtro> filtrosEscaner);
-    public Boolean eliminarFitroGuardado(Long idFiltro);
 }

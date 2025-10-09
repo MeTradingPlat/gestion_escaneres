@@ -92,10 +92,11 @@ public class EstrategiaFiltroChange implements IEstrategiaFiltro {
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.FLOAT;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(),enumTipoValor);
+        EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
-            EnumCondicional.MAYOR_QUE.getEtiqueta(),
+            enumCondicional.getEtiqueta(),
             enumTipoValor,
-            EnumCondicional.MAYOR_QUE,
+            enumCondicional,
             valorUsuario != null ? valorUsuario.getValor1() : -50.0F,
             valorUsuario != null ? valorUsuario.getValor2() : 50.0F
         );
@@ -105,10 +106,11 @@ public class EstrategiaFiltroChange implements IEstrategiaFiltro {
     private Parametro crearParametroPuntoReferencia(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumPuntoReferencia.values(), enumTipoValor);
+        EnumPuntoReferencia enumValor = valorUsuario != null ? EnumPuntoReferencia.valueOf(valorUsuario.getValor()) : EnumPuntoReferencia.CLOSE;
         ValorString valor = new ValorString(
-            EnumPuntoReferencia.CLOSE.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumPuntoReferencia.CLOSE.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.PUNTO_REFERENCIA_CHANGE, EnumParametro.PUNTO_REFERENCIA_CHANGE.getEtiqueta(), valor, opciones);
     }
@@ -116,10 +118,11 @@ public class EstrategiaFiltroChange implements IEstrategiaFiltro {
     private Parametro crearParametroTipoMedida(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTipoValorMedida.values(), enumTipoValor);
+        EnumTipoValorMedida enumValor = valorUsuario != null ? EnumTipoValorMedida.valueOf(valorUsuario.getValor()) : EnumTipoValorMedida.PRECIO;
         ValorString valor = new ValorString(
-            EnumTipoValorMedida.PRECIO.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTipoValorMedida.PRECIO.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIPO_MEDIDA_CHANGE, EnumParametro.TIPO_MEDIDA_CHANGE.getEtiqueta(), valor, opciones);
     }

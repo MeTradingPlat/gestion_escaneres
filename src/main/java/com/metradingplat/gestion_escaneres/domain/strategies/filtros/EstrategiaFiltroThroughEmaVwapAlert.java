@@ -93,10 +93,11 @@ public class EstrategiaFiltroThroughEmaVwapAlert implements IEstrategiaFiltro {
     private Parametro crearParametroLineaCruce(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumLineaCruce.values(),enumTipoValor);
+        EnumLineaCruce enumValor = valorUsuario != null ? EnumLineaCruce.valueOf(valorUsuario.getValor()) : EnumLineaCruce.VWAP;
         ValorString valor = new ValorString(
-            EnumLineaCruce.VWAP.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumLineaCruce.VWAP.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.THROUGH_EMA_VWAP_LINEA_CRUCE, EnumParametro.THROUGH_EMA_VWAP_LINEA_CRUCE.getEtiqueta(), valor, opciones);
     }
@@ -115,10 +116,11 @@ public class EstrategiaFiltroThroughEmaVwapAlert implements IEstrategiaFiltro {
     private Parametro crearParametroDireccionRompimiento(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumDireccionRompimiento.values(),enumTipoValor);
+        EnumDireccionRompimiento enumValor = valorUsuario != null ? EnumDireccionRompimiento.valueOf(valorUsuario.getValor()) : EnumDireccionRompimiento.ABOVE;
         ValorString valor = new ValorString(
-            EnumDireccionRompimiento.ABOVE.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumDireccionRompimiento.ABOVE.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.THROUGH_EMA_VWAP_DIRECCION_ROMPIMIENTO, EnumParametro.THROUGH_EMA_VWAP_DIRECCION_ROMPIMIENTO.getEtiqueta(), valor, opciones);
     }

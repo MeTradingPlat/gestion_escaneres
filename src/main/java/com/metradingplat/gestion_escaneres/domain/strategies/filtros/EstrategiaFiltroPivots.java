@@ -90,10 +90,11 @@ public class EstrategiaFiltroPivots implements IEstrategiaFiltro {
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.FLOAT;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(),enumTipoValor);
+        EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
-            EnumCondicional.MAYOR_QUE.getEtiqueta(),
+            enumCondicional.getEtiqueta(),
             enumTipoValor,
-            EnumCondicional.MAYOR_QUE,
+            enumCondicional,
             valorUsuario != null ? valorUsuario.getValor1() : 0.0F,
             valorUsuario != null ? valorUsuario.getValor2() : 0.0F
         );
@@ -103,10 +104,11 @@ public class EstrategiaFiltroPivots implements IEstrategiaFiltro {
     private Parametro crearParametroTimeframe(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(new EnumTimeframe[]{EnumTimeframe._1D, EnumTimeframe._1W, EnumTimeframe._1MO}, enumTipoValor);
+        EnumTimeframe enumValor = valorUsuario != null ? EnumTimeframe.valueOf(valorUsuario.getValor()) : EnumTimeframe._1D;
         ValorString valor = new ValorString(
-            EnumTimeframe._1D.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTimeframe._1D.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIMEFRAME_PIVOTS, EnumParametro.TIMEFRAME_PIVOTS.getEtiqueta(), valor, opciones);
     }

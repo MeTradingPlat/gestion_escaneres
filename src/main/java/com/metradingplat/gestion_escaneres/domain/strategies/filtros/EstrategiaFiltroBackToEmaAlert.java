@@ -100,10 +100,11 @@ public class EstrategiaFiltroBackToEmaAlert implements IEstrategiaFiltro {
     private Parametro crearParametroTimeframe(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTimeframe.values(), enumTipoValor);
+        EnumTimeframe enumValor = valorUsuario != null ? EnumTimeframe.valueOf(valorUsuario.getValor()) : EnumTimeframe._1D;
         ValorString valor = new ValorString(
-            EnumTimeframe._1D.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTimeframe._1D.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIMEFRAME_BACK_TO_EMA, EnumParametro.TIMEFRAME_BACK_TO_EMA.getEtiqueta(), valor, opciones);
     }

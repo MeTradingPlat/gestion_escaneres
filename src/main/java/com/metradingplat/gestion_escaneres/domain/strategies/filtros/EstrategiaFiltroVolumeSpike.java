@@ -94,10 +94,11 @@ public class EstrategiaFiltroVolumeSpike implements IEstrategiaFiltro {
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.FLOAT;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(), enumTipoValor);
+        EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
-            EnumCondicional.MAYOR_QUE.getEtiqueta(),
+            enumCondicional.getEtiqueta(),
             enumTipoValor,
-            EnumCondicional.MAYOR_QUE,
+            enumCondicional,
             valorUsuario != null ? valorUsuario.getValor1() : 10F,
             valorUsuario != null ? valorUsuario.getValor2() : 20F
         );
@@ -118,10 +119,11 @@ public class EstrategiaFiltroVolumeSpike implements IEstrategiaFiltro {
     private Parametro crearParametroTimeframe(ValorString valorUsuario){
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTimeframe.values(), enumTipoValor);
+        EnumTimeframe enumValor = valorUsuario != null ? EnumTimeframe.valueOf(valorUsuario.getValor()) : EnumTimeframe._5M;
         ValorString valor = new ValorString(
-            EnumTimeframe._5M.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTimeframe._5M.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIMEFRAME_VOLUME_SPIKE,EnumParametro.TIMEFRAME_VOLUME_SPIKE.getEtiqueta(), valor, opciones);
     }

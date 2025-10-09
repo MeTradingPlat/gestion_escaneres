@@ -24,36 +24,10 @@ public class GestionarFiltroGatewayImplAdapter implements GestionarFiltroGateway
 
     @Override
     @Transactional(readOnly = true)
-    public Boolean existeFiltroPorId(Long idFiltro) {
-        return this.objFiltroRepository.existsById(idFiltro);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Filtro obtenerFiltroGuardado(Long idFiltro) {
-        FiltroEntity entity = this.objFiltroRepository.findById(idFiltro).get();
-        Filtro filtro = this.objMapper.mappearEntityAFiltro(entity);
-        return filtro;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<Filtro> obtenerFiltrosGuardados(Long idEscaner) {
         List<FiltroEntity> entities = this.objFiltroRepository.findFiltrosByEscanerId(idEscaner);
         List<Filtro> filtros = this.objMapper.mappearListaEntityAFiltro(entities);
         return filtros;
-    }
-
-    @Override
-    @Transactional
-    public Filtro guardarFiltro(Long idEscaner, Filtro objFiltro) {
-        FiltroEntity filtroEntity = this.objMapper.mappearFiltroAEntity(objFiltro);
-        EscanerEntity escanerEntity = this.objEscanerRepository.findById(idEscaner).get();
-        escanerEntity.getFiltros().add(filtroEntity);
-        escanerEntity.asociarTodo();
-        EscanerEntity savedEscaner = this.objEscanerRepository.save(escanerEntity);
-        FiltroEntity savedFiltro = savedEscaner.getFiltros().get(savedEscaner.getFiltros().size() - 1);
-        return this.objMapper.mappearEntityAFiltro(savedFiltro);
     }
 
     @Override
@@ -66,13 +40,5 @@ public class GestionarFiltroGatewayImplAdapter implements GestionarFiltroGateway
         escanerEntity.asociarTodo();
         EscanerEntity savedEscaner = this.objEscanerRepository.save(escanerEntity);
         return this.objMapper.mappearListaEntityAFiltro(savedEscaner.getFiltros());
-    }
-
-    @Override
-    @Transactional
-    public Boolean eliminarFiltro(Long idFiltro) {
-        this.objFiltroRepository.deleteById(idFiltro);
-        Boolean respuesta = !this.objFiltroRepository.existsById(idFiltro);
-        return respuesta;
     }
 }

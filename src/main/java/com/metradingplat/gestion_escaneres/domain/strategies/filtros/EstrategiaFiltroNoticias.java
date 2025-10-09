@@ -87,10 +87,11 @@ public class EstrategiaFiltroNoticias implements IEstrategiaFiltro {
     private Parametro crearParametroEstadoNoticia(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumEstadoNoticia.values(), enumTipoValor);
+        EnumEstadoNoticia enumValor = valorUsuario != null ? EnumEstadoNoticia.valueOf(valorUsuario.getValor()) : EnumEstadoNoticia.NINGUNA;
         ValorString valor = new ValorString(
-            EnumEstadoNoticia.NINGUNA.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumEstadoNoticia.NINGUNA.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.ESTADO_NOTICIA, EnumParametro.ESTADO_NOTICIA.getEtiqueta(), valor, opciones);
     }

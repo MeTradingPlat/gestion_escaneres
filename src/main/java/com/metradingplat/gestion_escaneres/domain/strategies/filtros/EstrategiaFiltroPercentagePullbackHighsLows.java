@@ -92,10 +92,11 @@ public class EstrategiaFiltroPercentagePullbackHighsLows implements IEstrategiaF
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.FLOAT;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(),enumTipoValor);
+        EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
-            EnumCondicional.MAYOR_QUE.getEtiqueta(),
+            enumCondicional.getEtiqueta(),
             enumTipoValor,
-            EnumCondicional.MAYOR_QUE,
+            enumCondicional,
             valorUsuario != null ? valorUsuario.getValor1() : 10.0F,
             valorUsuario != null ? valorUsuario.getValor2() : 50.0F
         );
@@ -105,10 +106,11 @@ public class EstrategiaFiltroPercentagePullbackHighsLows implements IEstrategiaF
     private Parametro crearParametroPuntoReferencia(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumPuntoReferenciaPullback.values(), enumTipoValor);
+        EnumPuntoReferenciaPullback enumValor = valorUsuario != null ? EnumPuntoReferenciaPullback.valueOf(valorUsuario.getValor()) : EnumPuntoReferenciaPullback.ALTO;
         ValorString valor = new ValorString(
-            EnumPuntoReferenciaPullback.ALTO.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumPuntoReferenciaPullback.ALTO.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.PUNTO_REFERENCIA_PULLBACK, EnumParametro.PUNTO_REFERENCIA_PULLBACK.getEtiqueta(), valor, opciones);
     }

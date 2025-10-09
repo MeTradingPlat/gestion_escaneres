@@ -89,10 +89,11 @@ public class EstrategiaFiltroBreakOverRecentHighsLows implements IEstrategiaFilt
     private Parametro crearParametroOpcionExtremo(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumOpcionExtremo.values(), enumTipoValor);
+        EnumOpcionExtremo enumValor = valorUsuario != null ? EnumOpcionExtremo.valueOf(valorUsuario.getValor()) : EnumOpcionExtremo.HIGH;
         ValorString valor = new ValorString(
-            EnumOpcionExtremo.HIGH.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumOpcionExtremo.HIGH.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.OPCION_EXTREMO_BREAK_OVER, EnumParametro.OPCION_EXTREMO_BREAK_OVER.getEtiqueta(), valor, opciones);
     }
@@ -100,10 +101,11 @@ public class EstrategiaFiltroBreakOverRecentHighsLows implements IEstrategiaFilt
     private Parametro crearParametroTimeframe(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTimeframe.values(), enumTipoValor);
+        EnumTimeframe enumValor = valorUsuario != null ? EnumTimeframe.valueOf(valorUsuario.getValor()) : EnumTimeframe._1D;
         ValorString valor = new ValorString(
-            EnumTimeframe._1D.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTimeframe._1D.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIMEFRAME_BREAK_OVER, EnumParametro.TIMEFRAME_BREAK_OVER.getEtiqueta(), valor, opciones);
     }

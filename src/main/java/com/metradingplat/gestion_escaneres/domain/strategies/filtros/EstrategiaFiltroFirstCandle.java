@@ -87,10 +87,11 @@ public class EstrategiaFiltroFirstCandle implements IEstrategiaFiltro {
     private Parametro crearParametroTipoVela(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicionFirstCandle.values(), enumTipoValor);
+        EnumCondicionFirstCandle enumValor = valorUsuario != null ? EnumCondicionFirstCandle.valueOf(valorUsuario.getValor()) : EnumCondicionFirstCandle.ALCISTA;
         ValorString valor = new ValorString(
-            EnumCondicionFirstCandle.ALCISTA.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumCondicionFirstCandle.ALCISTA.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIPO_VELA_FIRTS_CANDLE,EnumParametro.TIPO_VELA_FIRTS_CANDLE.getEtiqueta(), valor, opciones);
     }

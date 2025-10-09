@@ -94,10 +94,11 @@ public class EstrategiaFiltroATR implements IEstrategiaFiltro {
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.FLOAT;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(), enumTipoValor);
+        EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
-            EnumCondicional.MAYOR_QUE.getEtiqueta(),
+            enumCondicional.getEtiqueta(),
             enumTipoValor,
-            EnumCondicional.MAYOR_QUE,
+            enumCondicional,
             valorUsuario != null ? valorUsuario.getValor1() : -0.10F,
             valorUsuario != null ? valorUsuario.getValor2() : 5.0F
         );
@@ -118,10 +119,11 @@ public class EstrategiaFiltroATR implements IEstrategiaFiltro {
     private Parametro crearParametroModoPromedioMovil(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumModoPromedioMovil.values(), enumTipoValor);
+        EnumModoPromedioMovil enumValor = valorUsuario != null ? EnumModoPromedioMovil.valueOf(valorUsuario.getValor()) : EnumModoPromedioMovil.EMA;
         ValorString valor = new ValorString(
-            EnumModoPromedioMovil.EMA.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumModoPromedioMovil.EMA.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.MODO_PROMEDIO_MOVIL_ATR, EnumParametro.MODO_PROMEDIO_MOVIL_ATR.getEtiqueta(), valor, opciones);
     }
@@ -129,10 +131,11 @@ public class EstrategiaFiltroATR implements IEstrategiaFiltro {
     private Parametro crearParametroTimeframe(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTimeframe.values(), enumTipoValor);
+        EnumTimeframe enumValor = valorUsuario != null ? EnumTimeframe.valueOf(valorUsuario.getValor()) : EnumTimeframe._1D;
         ValorString valor = new ValorString(
-            EnumTimeframe._1D.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTimeframe._1D.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIMEFRAME_ATR, EnumParametro.TIMEFRAME_ATR.getEtiqueta(), valor, opciones);
     }

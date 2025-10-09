@@ -91,10 +91,11 @@ public class EstrategiaFiltroEmaVwapSupportResistance implements IEstrategiaFilt
     private Parametro crearParametroLineaReferencia(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumLineaReferencia.values(), enumTipoValor);
+        EnumLineaReferencia enumValor = valorUsuario != null ? EnumLineaReferencia.valueOf(valorUsuario.getValor()) : EnumLineaReferencia.VWAP;
         ValorString valor = new ValorString(
-            EnumLineaReferencia.VWAP.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumLineaReferencia.VWAP.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.LINEA_REFERENCIA_EMA_VWAP_SUPPORT, EnumParametro.LINEA_REFERENCIA_EMA_VWAP_SUPPORT.getEtiqueta(), valor, opciones);
     }
@@ -113,10 +114,11 @@ public class EstrategiaFiltroEmaVwapSupportResistance implements IEstrategiaFilt
     private Parametro crearParametroTipoRol(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTipoRol.values(), enumTipoValor);
+        EnumTipoRol enumValor = valorUsuario != null ? EnumTipoRol.valueOf(valorUsuario.getValor()) : EnumTipoRol.RESISTENCIA;
         ValorString valor = new ValorString(
-            EnumTipoRol.RESISTENCIA.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTipoRol.RESISTENCIA.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIPO_ROL_EMA_VWAP_SUPPORT, EnumParametro.TIPO_ROL_EMA_VWAP_SUPPORT.getEtiqueta(), valor, opciones);
     }

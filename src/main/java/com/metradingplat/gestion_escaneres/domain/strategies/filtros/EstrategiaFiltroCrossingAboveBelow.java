@@ -1,5 +1,14 @@
 package com.metradingplat.gestion_escaneres.domain.strategies.filtros;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.metradingplat.gestion_escaneres.domain.enums.EnumCategoriaFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
@@ -14,15 +23,6 @@ import com.metradingplat.gestion_escaneres.domain.models.ValorInteger;
 import com.metradingplat.gestion_escaneres.domain.models.ValorString;
 import com.metradingplat.gestion_escaneres.domain.strategies.ValidadorParametroFiltro;
 import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class EstrategiaFiltroCrossingAboveBelow implements IEstrategiaFiltro {
     private final EnumFiltro enumFiltro = EnumFiltro.CROSSING_ABOVE_BELOW;
@@ -89,10 +89,11 @@ public class EstrategiaFiltroCrossingAboveBelow implements IEstrategiaFiltro {
     private Parametro crearParametroNivelCruce(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumNivelCruce.values(), enumTipoValor);
+        EnumNivelCruce enumValor = valorUsuario != null ? EnumNivelCruce.valueOf(valorUsuario.getValor()) : EnumNivelCruce.OPEN;
         ValorString valor = new ValorString(
-            EnumNivelCruce.OPEN.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumNivelCruce.OPEN.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.NIVEL_CRUCE_CROSSING_ABOVE_BELOW, EnumParametro.NIVEL_CRUCE_CROSSING_ABOVE_BELOW.getEtiqueta(), valor, opciones);
     }

@@ -87,10 +87,11 @@ public class EstrategiaFiltroSharesOutstanding implements IEstrategiaFiltro {
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.INTEGER;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(),enumTipoValor);
+        EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
-            EnumCondicional.MAYOR_QUE.getEtiqueta(),
+            enumCondicional.getEtiqueta(),
             enumTipoValor,
-            EnumCondicional.MAYOR_QUE,
+            enumCondicional,
             valorUsuario != null ? valorUsuario.getValor1() : 10_000_000,
             valorUsuario != null ? valorUsuario.getValor2() : 1_000_000_000
         );

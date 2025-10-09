@@ -78,11 +78,4 @@ public class FiltroRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(filtrosDTO);
     }
 
-    @DeleteMapping("/{idFiltro}")
-    public ResponseEntity<Boolean> eliminarFiltroGuardado(
-            @PathVariable("idFiltro") @NotNull @Positive Long idFiltro) {
-
-        Boolean respuesta = this.objGestionarFiltroCUInt.eliminarFitroGuardado(idFiltro);
-        return ResponseEntity.status(HttpStatus.OK).body(respuesta);
-    }
 }

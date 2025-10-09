@@ -32,10 +32,10 @@ public class GestionarFiltroCUAdapter implements GestionarFiltroCUIntPort {
     @Override
     public List<CategoriaFiltro> obtenerCategorias(){
         return Arrays.stream(EnumCategoriaFiltro.values())
-                     .map(enumCat -> new CategoriaFiltro(
-                        enumCat.getEtiqueta(),
-                        enumCat
-                        )).collect(Collectors.toList());
+                    .map(enumCat -> new CategoriaFiltro(
+                    enumCat.getEtiqueta(),
+                    enumCat
+                    )).collect(Collectors.toList());
     }
 
     @Override
@@ -62,37 +62,60 @@ public class GestionarFiltroCUAdapter implements GestionarFiltroCUIntPort {
         if (!this.objGestionarEscanerGatewayIntPort.existeEscanerPorId(idEscaner)){
             this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.id.notFound", idEscaner);
         }
-        return this.objGestionarFiltroGatewayIntPort.obtenerFiltrosGuardados(idEscaner);
+
+        List<Filtro> filtrosGuardados = this.objGestionarFiltroGatewayIntPort.obtenerFiltrosGuardados(idEscaner);
+        List<Filtro> filtrosARetornar = new ArrayList<Filtro>();
+
+        for (Filtro filtro : filtrosGuardados) {
+            Map<EnumParametro, Valor> valoresSeleccionados = extraerValoresSeleccionados(filtro);
+
+            filtrosARetornar.add(objGestorFactoryFiltro.crearFiltroConValoresSeleccionados(
+                filtro.getEnumFiltro(), valoresSeleccionados));
+        }
+
+        return filtrosARetornar;
     }
 
     @Override
     public List<Filtro> guardarFiltros(Long idEscaner, List<Filtro> filtros) {
+        if (!objGestionarEscanerGatewayIntPort.existeEscanerPorId(idEscaner)) {
+            objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.id.notFound", idEscaner);
+        }
+
         List<ResultadoValidacion> errores = new ArrayList<ResultadoValidacion>();
-        if (!this.objGestionarEscanerGatewayIntPort.existeEscanerPorId(idEscaner)) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.scanner.id.notFound", idEscaner);
-        }
+        List<Filtro> filtrosCreados = new ArrayList<Filtro>();
+
         for (Filtro filtro : filtros) {
-            Map<EnumParametro, Valor> valoresSeleccionados = filtro.getParametros().stream()
-                    .collect(Collectors.toMap(
-                            Parametro::getEnumParametro,
-                            Parametro::getObjValorSeleccionado
-                    ));
-            errores.addAll(this.objGestorFactoryFiltro.validarValoresSeleccionados(
-                    filtro.getEnumFiltro(),
-                    valoresSeleccionados
-            ));
-        }
-        if (!errores.isEmpty()) {
-                this.objFormateadorResultadosIntPort.errorValidacionFiltro(errores);
+            Map<EnumParametro, Valor> valoresSeleccionados = extraerValoresSeleccionados(filtro);
+
+            List<ResultadoValidacion> erroresFiltro = objGestorFactoryFiltro.validarValoresSeleccionados(
+                filtro.getEnumFiltro(), valoresSeleccionados);
+
+            if (!erroresFiltro.isEmpty()) {
+                errores.addAll(erroresFiltro);
+                continue;
             }
 
-        return this.objGestionarFiltroGatewayIntPort.guardarFiltros(idEscaner, filtros);
+            filtrosCreados.add(objGestorFactoryFiltro.crearFiltroConValoresSeleccionados(
+                filtro.getEnumFiltro(), valoresSeleccionados));
+        }
+
+
+        if (!errores.isEmpty()) {
+            objFormateadorResultadosIntPort.errorValidacionFiltro(errores);
+        }
+
+        objGestionarFiltroGatewayIntPort.guardarFiltros(idEscaner, filtrosCreados);
+
+        return filtrosCreados;
+
     }
 
-    public Boolean eliminarFitroGuardado(Long idFiltro){
-        if (!this.objGestionarFiltroGatewayIntPort.existeFiltroPorId(idFiltro)) {
-            this.objFormateadorResultadosIntPort.errorEntidadNoExiste("validation.filter.id.notFound", idFiltro);
-        }
-        return this.objGestionarFiltroGatewayIntPort.eliminarFiltro(idFiltro);
+    private Map<EnumParametro, Valor> extraerValoresSeleccionados(Filtro filtro) {
+        return filtro.getParametros().stream()
+            .collect(Collectors.toMap(
+                Parametro::getEnumParametro,
+                Parametro::getObjValorSeleccionado
+            ));
     }
 }

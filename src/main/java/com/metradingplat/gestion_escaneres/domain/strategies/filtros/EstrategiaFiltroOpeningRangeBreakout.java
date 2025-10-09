@@ -87,10 +87,11 @@ public class EstrategiaFiltroOpeningRangeBreakout implements IEstrategiaFiltro {
     private Parametro crearParametroTimeframe(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTimeframe.values(), enumTipoValor);
+        EnumTimeframe enumValor = valorUsuario != null ? EnumTimeframe.valueOf(valorUsuario.getValor()) : EnumTimeframe._5M;
         ValorString valor = new ValorString(
-            EnumTimeframe._5M.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTimeframe._5M.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.TIMEFRAME_OPENING_RANGE_BREAKOUT, EnumParametro.TIMEFRAME_OPENING_RANGE_BREAKOUT.getEtiqueta(), valor, opciones);
     }

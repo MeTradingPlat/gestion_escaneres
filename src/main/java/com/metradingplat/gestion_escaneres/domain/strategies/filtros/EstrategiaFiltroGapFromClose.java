@@ -90,10 +90,11 @@ public class EstrategiaFiltroGapFromClose implements IEstrategiaFiltro {
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.FLOAT;
         List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(), enumTipoValor);
+        EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
-            EnumCondicional.MAYOR_QUE.getEtiqueta(),
+            enumCondicional.getEtiqueta(),
             enumTipoValor,
-            EnumCondicional.MAYOR_QUE,
+            enumCondicional,
             valorUsuario != null ? valorUsuario.getValor1() : 0.10F,
             valorUsuario != null ? valorUsuario.getValor2() : 10.0F
         );
@@ -103,10 +104,11 @@ public class EstrategiaFiltroGapFromClose implements IEstrategiaFiltro {
     private Parametro crearParametroFormato(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
         List<Valor> opciones = this.obtenerOpciones(EnumTipoValorMedida.values(), enumTipoValor);
+        EnumTipoValorMedida enumValor = valorUsuario != null ? EnumTipoValorMedida.valueOf(valorUsuario.getValor()) : EnumTipoValorMedida.PORCENTAJE;
         ValorString valor = new ValorString(
-            EnumTipoValorMedida.PORCENTAJE.getEtiqueta(),
+            enumValor.getEtiqueta(),
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : EnumTipoValorMedida.PORCENTAJE.name()
+            enumValor.name()
         );
         return new Parametro(EnumParametro.FORMATO_GAP_FROM_CLOSE, EnumParametro.FORMATO_GAP_FROM_CLOSE.getEtiqueta(), valor, opciones);
     }
