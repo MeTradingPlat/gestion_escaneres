@@ -34,12 +34,10 @@ public class GestorEstrategiaFiltro {
 
             this.mapEnumFiltroIEstrategiaFiltro.put(enumFiltro, filtro);
 
-            // Agrega el filtro a su categoría específica
             this.mapCategoriaFiltros
                 .computeIfAbsent(categoria, k -> new ArrayList<>())
                 .add(enumFiltro);
 
-            // Agrega el filtro también a la categoría TODOS
             this.mapCategoriaFiltros
                 .computeIfAbsent(EnumCategoriaFiltro.TODOS, k -> new ArrayList<>())
                 .add(enumFiltro);
