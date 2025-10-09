@@ -39,7 +39,7 @@ public class ParametroEntity {
     @JoinColumn(name = "idFiltro", nullable = false)
     private FiltroEntity objFiltro;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE})
     @JoinColumn(name = "id_valor", nullable = false, unique = true)
     private ValorEntity objValorSeleccionado;
 

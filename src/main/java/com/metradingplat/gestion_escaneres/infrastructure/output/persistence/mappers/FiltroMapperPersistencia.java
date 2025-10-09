@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.SubclassMapping;
 
@@ -27,6 +28,7 @@ public interface FiltroMapperPersistencia {
 
     // Entity -> Dominio
     Filtro mappearEntityAFiltro(FiltroEntity entity);
+    @Mapping(target = "objValorSeleccionado", source = "objValorSeleccionado")
     Parametro mappearEntityAParametro(ParametroEntity entity);
 
     @SubclassMapping(source = ValorIntegerEntity.class, target = ValorInteger.class)
@@ -45,6 +47,7 @@ public interface FiltroMapperPersistencia {
     FiltroEntity mappearFiltroAEntity(Filtro filtro);
 
     @InheritInverseConfiguration(name = "mappearEntityAParametro")
+    @Mapping(target = "objValorSeleccionado", source = "objValorSeleccionado")
     ParametroEntity mappearParametroAEntity(Parametro parametro);
 
     ValorIntegerEntity mappearValorIntegerAEntity(ValorInteger valor);
