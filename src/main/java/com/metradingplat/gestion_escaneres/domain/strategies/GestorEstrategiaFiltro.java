@@ -29,10 +29,20 @@ public class GestorEstrategiaFiltro {
         this.mapCategoriaFiltros = new EnumMap<>(EnumCategoriaFiltro.class);
 
         for (IEstrategiaFiltro filtro : filtros) {
-            this.mapEnumFiltroIEstrategiaFiltro.put(filtro.obtenerEnumFiltro(), filtro);
+            EnumFiltro enumFiltro = filtro.obtenerEnumFiltro();
+            EnumCategoriaFiltro categoria = filtro.obtenerEnumCategoria();
+
+            this.mapEnumFiltroIEstrategiaFiltro.put(enumFiltro, filtro);
+
+            // Agrega el filtro a su categoría específica
             this.mapCategoriaFiltros
-                .computeIfAbsent(filtro.obtenerEnumCategoria(), k -> new ArrayList<>())
-                .add(filtro.obtenerEnumFiltro());
+                .computeIfAbsent(categoria, k -> new ArrayList<>())
+                .add(enumFiltro);
+
+            // Agrega el filtro también a la categoría TODOS
+            this.mapCategoriaFiltros
+                .computeIfAbsent(EnumCategoriaFiltro.TODOS, k -> new ArrayList<>())
+                .add(enumFiltro);
         }
     }
 
