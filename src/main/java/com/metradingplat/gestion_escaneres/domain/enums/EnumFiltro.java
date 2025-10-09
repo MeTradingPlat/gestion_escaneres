@@ -10,7 +10,7 @@ public enum EnumFiltro {
     VOLUME("filter.volume.name", "filter.volume.description"),
     AVERAGE_VOLUME("filter.averageVolume.name", "filter.averageVolume.description"),
     VOLUMEN_POST_PRE("filter.volumenPostPre.name", "filter.volumenPostPre.description"),
-    RELATIVE_VOLUME("filter.relativeVolume.name", "filter.relativeVolume"),
+    RELATIVE_VOLUME("filter.relativeVolume.name", "filter.relativeVolume.description"),
     RELATIVE_VOLUME_SAME_TIME("filter.relativeVolumeSameTime.name", "filter.relativeVolumeSameTime.description"),
     VOLUME_SPIKE("filter.volumeSpike.name", "filter.volumeSpike.description"),
 
