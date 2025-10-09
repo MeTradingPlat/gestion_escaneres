@@ -60,7 +60,7 @@ public class EstrategiaFiltroThroughEmaVwapAlert implements IEstrategiaFiltro {
         objCategoriaFiltro.setEnumCategoriaFiltro(this.enumCategoria);
         objCategoriaFiltro.setEtiqueta(this.enumCategoria.getEtiqueta());
 
-        filtro.setObjCategoriaFiltro(objCategoriaFiltro);
+        filtro.setObjCategoria(objCategoriaFiltro);
 
         return filtro;
     }

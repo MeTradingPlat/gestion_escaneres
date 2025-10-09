@@ -14,6 +14,6 @@ public class Filtro {
     private EnumFiltro enumFiltro;
     private String etiquetaNombre;
     private String etiquetaDescripcion;
-    private CategoriaFiltro objCategoriaFiltro;
+    private CategoriaFiltro objCategoria;
     private List<Parametro> parametros;
 }
