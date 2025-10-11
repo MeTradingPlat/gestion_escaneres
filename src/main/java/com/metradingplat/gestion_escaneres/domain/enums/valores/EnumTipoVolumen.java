@@ -10,4 +10,10 @@ public enum EnumTipoVolumen implements IEnumValores{
     APERTURA("crossLevel.open");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
+
 }

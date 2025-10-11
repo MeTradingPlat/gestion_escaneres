@@ -74,21 +74,15 @@ public class EstrategiaFiltroCrossingAboveBelow implements IEstrategiaFiltro {
         return filtro;
     }
 
-    private List<Valor> obtenerOpciones(IEnumValores[] enumValores, EnumTipoValor tipoValor) {
-        List<Valor> opciones = Arrays.stream(enumValores)
-            .map(e -> new Valor(e.getEtiqueta(), tipoValor))
+    private List<Valor> obtenerOpciones(IEnumValores[] enumValores) {
+        return Arrays.stream(enumValores)
+            .map(e -> new ValorString(e.getEtiqueta(), EnumTipoValor.STRING, e.getName()))
             .collect(Collectors.toList());
-
-        if (opciones.isEmpty()) {
-            opciones.add(new Valor("etiqueta.vacia", tipoValor));
-        }
-
-        return opciones;
     }
 
     private Parametro crearParametroNivelCruce(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
-        List<Valor> opciones = this.obtenerOpciones(EnumNivelCruce.values(), enumTipoValor);
+        List<Valor> opciones = this.obtenerOpciones(EnumNivelCruce.values());
         EnumNivelCruce enumValor = valorUsuario != null ? EnumNivelCruce.valueOf(valorUsuario.getValor()) : EnumNivelCruce.OPEN;
         ValorString valor = new ValorString(
             enumValor.getEtiqueta(),
@@ -100,7 +94,7 @@ public class EstrategiaFiltroCrossingAboveBelow implements IEstrategiaFiltro {
 
     private Parametro crearParametroPeriodoEma(ValorInteger valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.INTEGER;
-        List<Valor> opciones = this.obtenerOpciones(new IEnumValores[0], enumTipoValor);
+        List<Valor> opciones = this.obtenerOpciones(new IEnumValores[0]); 
         ValorInteger valor = new ValorInteger(
             "etiqueta.vacia",
             enumTipoValor,

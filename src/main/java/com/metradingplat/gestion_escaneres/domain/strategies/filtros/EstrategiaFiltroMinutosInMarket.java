@@ -11,6 +11,7 @@ import com.metradingplat.gestion_escaneres.domain.models.Filtro;
 import com.metradingplat.gestion_escaneres.domain.models.Parametro;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
 import com.metradingplat.gestion_escaneres.domain.models.ValorInteger;
+import com.metradingplat.gestion_escaneres.domain.models.ValorString;
 import com.metradingplat.gestion_escaneres.domain.models.ValorCondicional;
 import com.metradingplat.gestion_escaneres.domain.strategies.ValidadorParametroFiltro;
 import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
@@ -74,21 +75,15 @@ public class EstrategiaFiltroMinutosInMarket implements IEstrategiaFiltro {
         return filtro;
     }
 
-    private List<Valor> obtenerOpciones(IEnumValores[] enumValores, EnumTipoValor tipoValor) {
-        List<Valor> opciones = Arrays.stream(enumValores)
-            .map(e -> new Valor(e.getEtiqueta(), tipoValor))
+    private List<Valor> obtenerOpciones(IEnumValores[] enumValores) {
+        return Arrays.stream(enumValores)
+            .map(e -> new ValorString(e.getEtiqueta(), EnumTipoValor.STRING, e.getName()))
             .collect(Collectors.toList());
-
-        if (opciones.isEmpty()) {
-            opciones.add(new Valor("etiqueta.vacia", tipoValor));
-        }
-
-        return opciones;
     }
 
     private Parametro crearParametroCondicion(ValorCondicional valorUsuario) {
-        EnumTipoValor enumTipoValor = EnumTipoValor.FLOAT;
-        List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values(), enumTipoValor);
+        EnumTipoValor enumTipoValor = EnumTipoValor.CONDICIONAL;
+        List<Valor> opciones = this.obtenerOpciones(EnumCondicional.values());
         EnumCondicional enumCondicional = valorUsuario != null ? valorUsuario.getEnumCondicional() : EnumCondicional.MAYOR_QUE;
         ValorCondicional valor = new ValorCondicional(
             enumCondicional.getEtiqueta(),
@@ -102,7 +97,7 @@ public class EstrategiaFiltroMinutosInMarket implements IEstrategiaFiltro {
 
     private Parametro crearParametroMinutosTranscurridos(ValorInteger valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.INTEGER;
-        List<Valor> opciones = this.obtenerOpciones(new IEnumValores[0], enumTipoValor);
+        List<Valor> opciones = this.obtenerOpciones(new IEnumValores[0]);
         ValorInteger valor = new ValorInteger(
             "etiqueta.vacia",
             enumTipoValor,

@@ -12,4 +12,9 @@ public enum EnumPuntoReferencia implements IEnumValores {
     CLOSE_PRE_MARKET("crossLevel.closePreMarket");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

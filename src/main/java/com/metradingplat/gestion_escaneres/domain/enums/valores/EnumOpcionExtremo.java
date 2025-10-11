@@ -10,4 +10,9 @@ public enum EnumOpcionExtremo implements IEnumValores {
     LOW("extremeOption.low");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

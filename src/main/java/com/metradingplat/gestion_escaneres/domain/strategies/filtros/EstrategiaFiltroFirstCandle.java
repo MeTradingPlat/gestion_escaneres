@@ -72,21 +72,15 @@ public class EstrategiaFiltroFirstCandle implements IEstrategiaFiltro {
         return filtro;
     }
 
-    private List<Valor> obtenerOpciones(IEnumValores[] enumValores, EnumTipoValor tipoValor) {
-        List<Valor> opciones = Arrays.stream(enumValores)
-            .map(e -> new Valor(e.getEtiqueta(), tipoValor))
+    private List<Valor> obtenerOpciones(IEnumValores[] enumValores) {
+        return Arrays.stream(enumValores)
+            .map(e -> new ValorString(e.getEtiqueta(), EnumTipoValor.STRING, e.getName()))
             .collect(Collectors.toList());
-
-        if (opciones.isEmpty()) {
-            opciones.add(new Valor("etiqueta.vacia", tipoValor));
-        }
-
-        return opciones;
     }
 
     private Parametro crearParametroTipoVela(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
-        List<Valor> opciones = this.obtenerOpciones(EnumCondicionFirstCandle.values(), enumTipoValor);
+        List<Valor> opciones = this.obtenerOpciones(EnumCondicionFirstCandle.values());
         EnumCondicionFirstCandle enumValor = valorUsuario != null ? EnumCondicionFirstCandle.valueOf(valorUsuario.getValor()) : EnumCondicionFirstCandle.ALCISTA;
         ValorString valor = new ValorString(
             enumValor.getEtiqueta(),

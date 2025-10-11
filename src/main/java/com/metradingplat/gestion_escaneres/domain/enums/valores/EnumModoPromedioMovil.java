@@ -12,4 +12,9 @@ public enum EnumModoPromedioMovil implements IEnumValores {
     RMA("movingAverageMode.rma");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

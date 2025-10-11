@@ -74,21 +74,15 @@ public class EstrategiaFiltroBackToEmaAlert implements IEstrategiaFiltro {
         return filtro;
     }
 
-    private List<Valor> obtenerOpciones(IEnumValores[] enumValores, EnumTipoValor tipoValor) {
-        List<Valor> opciones = Arrays.stream(enumValores)
-            .map(e -> new Valor(e.getEtiqueta(), tipoValor))
+    private List<Valor> obtenerOpciones(IEnumValores[] enumValores) {
+        return Arrays.stream(enumValores)
+            .map(e -> new ValorString(e.getEtiqueta(), EnumTipoValor.STRING, e.getName()))
             .collect(Collectors.toList());
-
-        if (opciones.isEmpty()) {
-            opciones.add(new Valor("etiqueta.vacia", tipoValor));
-        }
-
-        return opciones;
     }
 
     private Parametro crearParametroPeriodoEma(ValorInteger valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.INTEGER;
-        List<Valor> opciones = this.obtenerOpciones(new IEnumValores[0], enumTipoValor);
+        List<Valor> opciones = this.obtenerOpciones(new IEnumValores[0]); 
         ValorInteger valor = new ValorInteger(
             "etiqueta.vacia",
             enumTipoValor,
@@ -99,7 +93,7 @@ public class EstrategiaFiltroBackToEmaAlert implements IEstrategiaFiltro {
 
     private Parametro crearParametroTimeframe(ValorString valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.STRING;
-        List<Valor> opciones = this.obtenerOpciones(EnumTimeframe.values(), enumTipoValor);
+        List<Valor> opciones = this.obtenerOpciones(EnumTimeframe.values());
         EnumTimeframe enumValor = valorUsuario != null ? EnumTimeframe.valueOf(valorUsuario.getValor()) : EnumTimeframe._1D;
         ValorString valor = new ValorString(
             enumValor.getEtiqueta(),

@@ -13,4 +13,9 @@ public enum EnumCondicional implements IEnumValores {
     IGUAL_A("condition.equalTo");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

@@ -10,4 +10,9 @@ public enum EnumCondicionalBoolean implements IEnumValores {
     FALSO("condition.false");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

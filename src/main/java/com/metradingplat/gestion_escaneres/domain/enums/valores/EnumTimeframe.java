@@ -36,4 +36,9 @@ public enum EnumTimeframe implements IEnumValores{
     _1Y("timeframe.1y");
     
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

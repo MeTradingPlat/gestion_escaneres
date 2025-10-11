@@ -11,4 +11,9 @@ public enum EnumEstadoNoticia implements IEnumValores{
     NINGUNA("news.state.none");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

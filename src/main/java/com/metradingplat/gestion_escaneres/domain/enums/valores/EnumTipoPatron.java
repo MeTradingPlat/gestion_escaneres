@@ -10,4 +10,9 @@ public enum EnumTipoPatron implements IEnumValores{
     BULLISH("direction.bullish");
     
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

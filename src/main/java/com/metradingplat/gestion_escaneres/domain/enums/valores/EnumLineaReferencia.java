@@ -11,4 +11,9 @@ public enum EnumLineaReferencia implements IEnumValores{
     EMA("crossLine.ema");
     
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

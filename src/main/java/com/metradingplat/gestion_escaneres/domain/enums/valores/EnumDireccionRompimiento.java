@@ -10,4 +10,9 @@ public enum EnumDireccionRompimiento implements IEnumValores {
     BELOW("direction.below");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

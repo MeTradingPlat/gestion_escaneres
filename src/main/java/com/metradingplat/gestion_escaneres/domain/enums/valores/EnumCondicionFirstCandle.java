@@ -10,4 +10,9 @@ public enum EnumCondicionFirstCandle implements IEnumValores {
     BAJISTA("direction.bearish");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

@@ -10,4 +10,9 @@ public enum EnumTipoRol implements IEnumValores {
     SOPORTE("roleType.support");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

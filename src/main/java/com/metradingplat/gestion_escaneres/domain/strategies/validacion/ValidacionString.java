@@ -39,6 +39,6 @@ public class ValidacionString<E extends Enum<E>> implements IValidacionFiltro {
 
     private boolean esValorEnumValido(String valor) {
         return Stream.of(enumOpcionesClass.getEnumConstants())
-                     .anyMatch(e -> e.name().equalsIgnoreCase(valor));
+                    .anyMatch(e -> e.name().equalsIgnoreCase(valor));
     }
 }

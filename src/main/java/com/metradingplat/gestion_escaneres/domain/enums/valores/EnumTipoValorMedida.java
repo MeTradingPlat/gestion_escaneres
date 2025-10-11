@@ -10,4 +10,9 @@ public enum EnumTipoValorMedida implements IEnumValores {
     PORCENTAJE("valueType.percentage");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

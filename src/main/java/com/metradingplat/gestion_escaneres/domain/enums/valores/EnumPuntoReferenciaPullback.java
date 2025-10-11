@@ -10,4 +10,9 @@ public enum EnumPuntoReferenciaPullback implements IEnumValores{
     BAJO("extremeOption.low");
 
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }

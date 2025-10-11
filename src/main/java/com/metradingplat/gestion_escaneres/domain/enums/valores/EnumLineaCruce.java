@@ -10,4 +10,9 @@ public enum EnumLineaCruce implements IEnumValores{
     EMA("crossLine.ema");
     
     private final String etiqueta;
+    
+    @Override
+    public String getName() {
+        return this.name();
+    }
 }
