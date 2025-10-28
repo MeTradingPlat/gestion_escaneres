@@ -25,6 +25,9 @@ public class ValorCondicionalEntity extends ValorEntity {
     @Column(name = "enum_condicional", length = 50)
     private EnumCondicional enumCondicional;
 
+    @Column(name = "isInteger")
+    private Boolean isInteger;
+    
     @Column(name = "valor1")
     private Number valor1;
 

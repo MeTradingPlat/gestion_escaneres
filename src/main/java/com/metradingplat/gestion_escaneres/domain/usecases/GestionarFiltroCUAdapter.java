@@ -7,10 +7,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import com.metradingplat.gestion_escaneres.application.dto.ResultadoValidacion;
 import com.metradingplat.gestion_escaneres.application.input.GestionarFiltroCUIntPort;
 import com.metradingplat.gestion_escaneres.application.output.FormateadorResultadosIntPort;
 import com.metradingplat.gestion_escaneres.application.output.GestionarEscanerGatewayIntPort;
 import com.metradingplat.gestion_escaneres.application.output.GestionarFiltroGatewayIntPort;
+import com.metradingplat.gestion_escaneres.application.output.GestorEstrategiaFiltroIntPort;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumCategoriaFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
@@ -18,15 +20,13 @@ import com.metradingplat.gestion_escaneres.domain.models.CategoriaFiltro;
 import com.metradingplat.gestion_escaneres.domain.models.Filtro;
 import com.metradingplat.gestion_escaneres.domain.models.Parametro;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
-import com.metradingplat.gestion_escaneres.domain.strategies.GestorEstrategiaFiltro;
-import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
 
 @RequiredArgsConstructor
 public class GestionarFiltroCUAdapter implements GestionarFiltroCUIntPort { 
 
     private final GestionarFiltroGatewayIntPort objGestionarFiltroGatewayIntPort;
     private final GestionarEscanerGatewayIntPort objGestionarEscanerGatewayIntPort;
-    private final GestorEstrategiaFiltro objGestorFactoryFiltro;
+    private final GestorEstrategiaFiltroIntPort objGestorFactoryFiltro;
     private final FormateadorResultadosIntPort objFormateadorResultadosIntPort;
 
     @Override

@@ -3,13 +3,13 @@ package com.metradingplat.gestion_escaneres.application.output;
 import java.util.List;
 import java.util.Locale;
 
-import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEntidadMercado.DTOAnswer.MercadoDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOAnswer.EscanerDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOAnswer.TipoEjecucionDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarFiltro.DTOAnswer.CategoriaDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarFiltro.DTOAnswer.FiltroDtoRespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarFiltro.DTOAnswer.ParametroDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarFiltro.DTOAnswer.ValorDTORespuesta;
+import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarMercado.DTOAnswer.MercadoDTORespuesta;
 
 public interface FuenteMensajesIntPort {
 

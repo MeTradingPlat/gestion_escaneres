@@ -2,7 +2,7 @@ package com.metradingplat.gestion_escaneres.application.output;
 
 import java.util.List;
 
-import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
+import com.metradingplat.gestion_escaneres.application.dto.ResultadoValidacion;
 
 public interface FormateadorResultadosIntPort {
     public void errorEntidadYaExiste(String llaveMensaje, Object... args);

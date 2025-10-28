@@ -13,10 +13,11 @@ import com.metradingplat.gestion_escaneres.domain.enums.valores.EnumCondicional;
 @NoArgsConstructor
 public class ValorCondicionalDTORespuesta extends ValorDTORespuesta {
     private EnumCondicional enumCondicional;
+    private Boolean isInteger;
     private Number valor1;
     private Number valor2;
 
-    public ValorCondicionalDTORespuesta(EnumTipoValor enumTipoValor, String etiqueta, EnumCondicional enumCondicional, Number valor1, Number valor2){
+    public ValorCondicionalDTORespuesta(EnumTipoValor enumTipoValor, String etiqueta, EnumCondicional enumCondicional, Boolean isInteger, Number valor1, Number valor2){
         super(etiqueta, enumTipoValor);
 
     }

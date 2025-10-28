@@ -6,13 +6,13 @@ import com.metradingplat.gestion_escaneres.domain.models.Escaner;
 import com.metradingplat.gestion_escaneres.domain.models.EstadoEscaner;
 import com.metradingplat.gestion_escaneres.domain.models.Mercado;
 import com.metradingplat.gestion_escaneres.domain.models.TipoEjecucion;
-import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEntidadMercado.DTOAnswer.MercadoDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOAnswer.EscanerDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOAnswer.EstadoEscanerDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOAnswer.TipoEjecucionDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOPetition.EscanerDTOPeticion;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOPetition.MercadoDTOPeticion;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOPetition.TipoEjecucionDTOPeticion;
+import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarMercado.DTOAnswer.MercadoDTORespuesta;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.metradingplat.gestion_escaneres.infrastructure.output.formatter;
 
 import com.metradingplat.gestion_escaneres.application.output.FormateadorResultadosIntPort;
-import com.metradingplat.gestion_escaneres.domain.strategies.validacion.ResultadoValidacion;
+import com.metradingplat.gestion_escaneres.application.dto.ResultadoValidacion;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.ownExceptions.EntidadNoExisteException;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.ownExceptions.EntidadYaExisteException;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.ownExceptions.EstadoDenegadoException;

@@ -4,11 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarMercado.DTOAnswer.MercadoDTORespuesta;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEntidadMercado.DTOAnswer.MercadoDTORespuesta;
 
 @Getter
 @Setter

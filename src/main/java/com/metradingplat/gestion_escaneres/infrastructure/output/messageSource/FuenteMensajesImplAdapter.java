@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import com.metradingplat.gestion_escaneres.application.output.FuenteMensajesIntPort;
-import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEntidadMercado.DTOAnswer.MercadoDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOAnswer.EscanerDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarEscaner.DTOAnswer.TipoEjecucionDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarFiltro.DTOAnswer.CategoriaDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarFiltro.DTOAnswer.FiltroDtoRespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarFiltro.DTOAnswer.ParametroDTORespuesta;
 import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarFiltro.DTOAnswer.ValorDTORespuesta;
+import com.metradingplat.gestion_escaneres.infrastructure.input.controllerGestionarMercado.DTOAnswer.MercadoDTORespuesta;
 
 @Component
 @RequiredArgsConstructor

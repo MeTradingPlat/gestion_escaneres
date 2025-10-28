@@ -4,9 +4,7 @@ import com.metradingplat.gestion_escaneres.application.output.FormateadorResulta
 import com.metradingplat.gestion_escaneres.application.output.GestionarEscanerGatewayIntPort;
 import com.metradingplat.gestion_escaneres.application.output.GestionarEstadoEscanerGatewayIntPort;
 import com.metradingplat.gestion_escaneres.application.output.GestionarFiltroGatewayIntPort;
-import com.metradingplat.gestion_escaneres.domain.strategies.GestorEstrategiaFiltro;
-import com.metradingplat.gestion_escaneres.domain.strategies.ValidadorParametroFiltro;
-import com.metradingplat.gestion_escaneres.domain.strategies.filtros.IEstrategiaFiltro;
+import com.metradingplat.gestion_escaneres.application.output.GestorEstrategiaFiltroIntPort;
 import com.metradingplat.gestion_escaneres.domain.usecases.GestionarEscanerCUAdapter;
 import com.metradingplat.gestion_escaneres.domain.usecases.GestionarEstadoEscanerCUAdapter;
 import com.metradingplat.gestion_escaneres.domain.usecases.GestionarFiltroCUAdapter;
@@ -29,23 +27,12 @@ public class BeanConfigurations {
     }
 
     @Bean
-    public GestionarFiltroCUAdapter gestionarFiltroCUIntPort(GestionarFiltroGatewayIntPort objGestionarFiltroGatewayIntPort,  GestionarEscanerGatewayIntPort objGestionarEscanerGatewayIntPort, GestorEstrategiaFiltro objGestorFactoryFiltro, FormateadorResultadosIntPort objFormateadorResultadosIntPort) {
+    public GestionarFiltroCUAdapter gestionarFiltroCUIntPort(GestionarFiltroGatewayIntPort objGestionarFiltroGatewayIntPort,  GestionarEscanerGatewayIntPort objGestionarEscanerGatewayIntPort, GestorEstrategiaFiltroIntPort objGestorFactoryFiltro, FormateadorResultadosIntPort objFormateadorResultadosIntPort) {
         return new GestionarFiltroCUAdapter(objGestionarFiltroGatewayIntPort, objGestionarEscanerGatewayIntPort, objGestorFactoryFiltro, objFormateadorResultadosIntPort);
     }
 
     @Bean
     public GestionarMercadoCUAdapter gestionarMercadoCUIntPort() {
         return new GestionarMercadoCUAdapter();
-    }
-
-    
-    @Bean
-    public GestorEstrategiaFiltro gestorEstrategiaFiltro(java.util.Set<IEstrategiaFiltro> filtros) {
-        return new GestorEstrategiaFiltro(filtros);
-    }
-
-    @Bean
-    public ValidadorParametroFiltro servicioValidacionFiltro() {
-        return new ValidadorParametroFiltro();
     }
 }
