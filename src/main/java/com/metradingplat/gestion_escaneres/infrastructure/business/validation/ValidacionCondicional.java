@@ -82,11 +82,17 @@ public class ValidacionCondicional implements IValidacionFiltro {
     }
 
     /**
-     * Valida que el tipo de dato del valor coincida con el flag isInteger.
+     * Valida que el tipo de dato del valor sea compatible con el flag isInteger.
+     *
+     * <p><b>Reglas de conversión:</b>
+     * <ul>
+     *   <li>✅ Integer → Float: PERMITIDO (conversión segura, no hay pérdida)</li>
+     *   <li>❌ Float → Integer: RECHAZADO (pérdida de decimales)</li>
+     * </ul>
      *
      * @param vc ValorCondicional a validar
      * @param enumParametro Parámetro para el mensaje de error
-     * @return Optional con error si no coincide, empty si es válido
+     * @return Optional con error si la conversión no es segura, empty si es válido
      */
     private Optional<ResultadoValidacion> validarTipoDato(ValorCondicional vc, EnumParametro enumParametro) {
         Number v1 = vc.getValor1();
@@ -94,24 +100,34 @@ public class ValidacionCondicional implements IValidacionFiltro {
         Boolean isInteger = vc.getIsInteger();
 
         if (isInteger) {
-            // Si isInteger=true, debe ser Integer o Long
-            if (v1 != null && !(v1 instanceof Integer) && !(v1 instanceof Long)) {
-                return resultado("validation.parameter.type.mustBeInteger", enumParametro);
+            // Si isInteger=true, NO aceptar Float/Double (pérdida de decimales)
+            if (v1 != null && (v1 instanceof Float || v1 instanceof Double)) {
+                // Verificar si tiene decimales
+                if (tieneDecimales(v1)) {
+                    return resultado("validation.parameter.type.floatToIntegerLoss", enumParametro);
+                }
             }
-            if (v2 != null && !(v2 instanceof Integer) && !(v2 instanceof Long)) {
-                return resultado("validation.parameter.type.mustBeInteger", enumParametro);
-            }
-        } else {
-            // Si isInteger=false, debe ser Float o Double
-            if (v1 != null && !(v1 instanceof Float) && !(v1 instanceof Double)) {
-                return resultado("validation.parameter.type.mustBeFloat", enumParametro);
-            }
-            if (v2 != null && !(v2 instanceof Float) && !(v2 instanceof Double)) {
-                return resultado("validation.parameter.type.mustBeFloat", enumParametro);
+            if (v2 != null && (v2 instanceof Float || v2 instanceof Double)) {
+                // Verificar si tiene decimales
+                if (tieneDecimales(v2)) {
+                    return resultado("validation.parameter.type.floatToIntegerLoss", enumParametro);
+                }
             }
         }
+        // Si isInteger=false (Float esperado), aceptar CUALQUIER Number (Integer se convierte a Float automáticamente)
 
         return Optional.empty();
+    }
+
+    /**
+     * Verifica si un número tiene parte decimal.
+     *
+     * @param n Número a verificar
+     * @return true si tiene decimales, false si es entero
+     */
+    private boolean tieneDecimales(Number n) {
+        double d = n.doubleValue();
+        return d != Math.floor(d);
     }
 
     /**
