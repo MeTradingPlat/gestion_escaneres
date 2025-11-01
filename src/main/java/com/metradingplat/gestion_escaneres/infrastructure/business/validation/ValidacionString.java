@@ -5,6 +5,7 @@ import com.metradingplat.gestion_escaneres.application.dto.ResultadoValidacion;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
 import com.metradingplat.gestion_escaneres.domain.models.ValorString;
@@ -17,26 +18,26 @@ public class ValidacionString<E extends Enum<E>> implements IValidacionFiltro {
     }
 
     @Override
-    public Optional<ResultadoValidacion> validar(EnumParametro enumParametro, Valor valor) {
+    public Optional<ResultadoValidacion> validar(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor) {
         if (valor == null) {
-            return resultado("validation.parameter.value.required", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.value.required");
         }
 
         if (!(valor instanceof ValorString valorString)) {
-            return resultado("validation.parameter.type.invalid", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.type.invalid");
         }
 
         String contenido = valorString.getValor();
 
         if (contenido == null || !esValorEnumValido(contenido)) {
-            return resultado("validation.parameter.value.required", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.value.required");
         }
 
         return Optional.empty();
     }
 
-    private Optional<ResultadoValidacion> resultado(String mensaje, EnumParametro parametro, Object... args) {
-        return Optional.of(new ResultadoValidacion(parametro, mensaje, args));
+    private Optional<ResultadoValidacion> resultado(EnumFiltro filtro, EnumParametro parametro, String mensaje, Object... args) {
+        return Optional.of(new ResultadoValidacion(filtro, parametro, mensaje, args));
     }
 
     private boolean esValorEnumValido(String valor) {

@@ -99,7 +99,7 @@ public class FiltroFactoryNoticias implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarString(EnumParametro.ESTADO_NOTICIA, valoresSeleccionados.get(EnumParametro.ESTADO_NOTICIA),
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.ESTADO_NOTICIA, valoresSeleccionados.get(EnumParametro.ESTADO_NOTICIA),
                 EnumEstadoNoticia.class)
                 .ifPresent(errores::add);
 

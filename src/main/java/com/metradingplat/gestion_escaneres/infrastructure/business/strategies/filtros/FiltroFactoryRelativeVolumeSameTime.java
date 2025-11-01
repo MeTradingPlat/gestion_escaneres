@@ -103,7 +103,7 @@ public class FiltroFactoryRelativeVolumeSameTime implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 20.0F, 2_000.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 20.0F, 2_000.0F)
                 .ifPresent(errores::add);
         
         return errores;

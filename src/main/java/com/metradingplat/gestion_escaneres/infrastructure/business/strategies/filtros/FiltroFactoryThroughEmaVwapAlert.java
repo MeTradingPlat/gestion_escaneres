@@ -107,7 +107,7 @@ public class FiltroFactoryThroughEmaVwapAlert implements IFiltroFactory {
         ValorInteger valor = new ValorInteger(
             "etiqueta.vacia",
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : 0
+            valorUsuario != null ? valorUsuario.getValor() : 2
         );
         return new Parametro(EnumParametro.THROUGH_EMA_VWAP_PERIODO_EMA, EnumParametro.THROUGH_EMA_VWAP_PERIODO_EMA.getEtiqueta(), valor, opciones);
     }
@@ -129,18 +129,18 @@ public class FiltroFactoryThroughEmaVwapAlert implements IFiltroFactory {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
         Valor lineaCruceValor = valoresSeleccionados.get(EnumParametro.THROUGH_EMA_VWAP_LINEA_CRUCE);
-        this.objValidador.validarString(EnumParametro.THROUGH_EMA_VWAP_LINEA_CRUCE, lineaCruceValor,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.THROUGH_EMA_VWAP_LINEA_CRUCE, lineaCruceValor,
                 EnumLineaCruce.class)
                 .ifPresent(errores::add);
-        
+
         // Validacion condicional para PERIODO_EMA_THROUGH_EMA_VWAP
         if (lineaCruceValor instanceof ValorString && ((ValorString) lineaCruceValor).getValor().equalsIgnoreCase(EnumLineaCruce.EMA.name())) {
-            this.objValidador.validarInteger(EnumParametro.THROUGH_EMA_VWAP_PERIODO_EMA,
+            this.objValidador.validarInteger(this.enumFiltro, EnumParametro.THROUGH_EMA_VWAP_PERIODO_EMA,
                     valoresSeleccionados.get(EnumParametro.THROUGH_EMA_VWAP_PERIODO_EMA), 2, 100)
                     .ifPresent(errores::add);
         }
 
-        this.objValidador.validarString(EnumParametro.THROUGH_EMA_VWAP_DIRECCION_ROMPIMIENTO,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.THROUGH_EMA_VWAP_DIRECCION_ROMPIMIENTO,
                 valoresSeleccionados.get(EnumParametro.THROUGH_EMA_VWAP_DIRECCION_ROMPIMIENTO),
                 EnumDireccionRompimiento.class)
                 .ifPresent(errores::add);

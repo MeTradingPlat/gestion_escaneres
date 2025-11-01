@@ -1,0 +1,753 @@
+{
+	"info": {
+		"_postman_id": "complete-scanner-tests-2025",
+		"name": "Gestión Escáneres - Suite Completa Profesional",
+		"description": "Colección exhaustiva de pruebas para el módulo de Gestión de Escáneres.\n\n**Cobertura Completa:**\n- ✅ CRUD de Escáneres (crear, leer, actualizar, eliminar)\n- ✅ Gestión de Estados (iniciar, detener, archivar, desarchivar)\n- ✅ Gestión de Filtros (categorías, obtener, guardar, validaciones)\n- ✅ Gestión de Mercados\n- ✅ Validaciones y Errores (todos los escenarios)\n- ✅ Reglas de Negocio (no iniciar sin filtros, etc.)\n\n**Variables:**\n- `baseUrl`: http://localhost:8080 (Gateway)\n- `scannerId`: Auto-generado\n- `scannerName`: Auto-generado\n\n**Total de Tests:** 40+ pruebas automatizadas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "00 - Setup & Health",
+			"item": [
+				{
+					"name": "Health Check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", () => pm.response.to.have.status(200));",
+									"console.log(\"✅ Servicio activo\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/actuator/health"
+					}
+				}
+			]
+		},
+		{
+			"name": "01 - Mercados",
+			"item": [
+				{
+					"name": "Listar Mercados Disponibles",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Es array\", () => pm.expect(pm.response.json()).to.be.an('array'));",
+									"pm.test(\"Tiene mercados\", () => pm.expect(pm.response.json().length).to.be.greaterThan(0));",
+									"pm.test(\"Estructura correcta\", () => {",
+									"    const mercados = pm.response.json();",
+									"    pm.expect(mercados[0]).to.have.property('enumMercado');",
+									"    pm.expect(mercados[0]).to.have.property('etiqueta');",
+									"});",
+									"console.log(\"✅ Mercados:\", pm.response.json().map(m => m.enumMercado).join(', '));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/mercado"
+					}
+				}
+			]
+		},
+		{
+			"name": "02 - Filtros - Catálogos",
+			"item": [
+				{
+					"name": "Listar Categorías de Filtros",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Es array\", () => pm.expect(pm.response.json()).to.be.an('array'));",
+									"pm.test(\"Tiene categorías\", () => pm.expect(pm.response.json().length).to.be.greaterThan(0));",
+									"console.log(\"✅ Categorías:\", pm.response.json().map(c => c.enumCategoria).join(', '));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/filtro/categorias"
+					}
+				},
+				{
+					"name": "Obtener Filtros por Categoría - INDICADORES",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Es array\", () => pm.expect(pm.response.json()).to.be.an('array'));",
+									"pm.test(\"Tiene filtros\", () => pm.expect(pm.response.json().length).to.be.greaterThan(0));",
+									"console.log(\"✅ Filtros de INDICADORES:\", pm.response.json().length);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/filtro?categoria=INDICADORES"
+					}
+				},
+				{
+					"name": "Obtener Filtro por Defecto - RSI",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Es objeto\", () => pm.expect(pm.response.json()).to.be.an('object'));",
+									"pm.test(\"Es filtro RSI\", () => pm.expect(pm.response.json().enumFiltro).to.eql('RSI'));",
+									"pm.test(\"Tiene parámetros\", () => pm.expect(pm.response.json().parametros).to.be.an('array'));",
+									"console.log(\"✅ Filtro RSI con\", pm.response.json().parametros.length, \"parámetros\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/filtro/defecto?filtro=RSI"
+					}
+				}
+			]
+		},
+		{
+			"name": "03 - Escáneres - CRUD",
+			"item": [
+				{
+					"name": "Crear Escáner - SIN FILTROS",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"scannerName\", \"Scanner_Test_\" + Date.now());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+									"pm.test(\"Tiene ID\", () => {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property('idEscaner');",
+									"    pm.environment.set(\"scannerId\", json.idEscaner);",
+									"});",
+									"pm.test(\"Estado DETENIDO\", () => {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json.objEstado.enumEstadoEscaner).to.eql('DETENIDO');",
+									"});",
+									"console.log(\"✅ Escáner creado (sin filtros) ID:\", pm.response.json().idEscaner);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"{{scannerName}}\",\n  \"descripcion\": \"Escáner de prueba sin filtros inicialmente\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [{\"enumMercado\": \"NASDAQ\"}],\n  \"objTipoEjecucion\": {\"enumTipoEjecucion\": \"UNA_VEZ\"}\n}"
+						},
+						"url": "{{baseUrl}}/api/escaner"
+					}
+				},
+				{
+					"name": "Obtener Escáner por ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"ID coincide\", () => {",
+									"    pm.expect(pm.response.json().idEscaner).to.eql(parseInt(pm.environment.get('scannerId')));",
+									"});",
+									"console.log(\"✅ Escáner obtenido:\", pm.response.json().nombre);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/{{scannerId}}"
+					}
+				},
+				{
+					"name": "Listar Escáneres Activos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Es array\", () => pm.expect(pm.response.json()).to.be.an('array'));",
+									"pm.test(\"Contiene nuestro escáner\", () => {",
+									"    const id = parseInt(pm.environment.get('scannerId'));",
+									"    const found = pm.response.json().some(s => s.idEscaner === id);",
+									"    pm.expect(found).to.be.true;",
+									"});",
+									"console.log(\"✅ Escáneres activos:\", pm.response.json().length);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner"
+					}
+				},
+				{
+					"name": "Actualizar Escáner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Descripción actualizada\", () => {",
+									"    pm.expect(pm.response.json().descripcion).to.include('ACTUALIZADO');",
+									"});",
+									"console.log(\"✅ Escáner actualizado\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"{{scannerName}}\",\n  \"descripcion\": \"Escáner ACTUALIZADO - Nueva descripción\",\n  \"horaInicio\": \"08:00:00\",\n  \"horaFin\": \"17:30:00\",\n  \"mercados\": [{\"enumMercado\": \"NYSE\"}],\n  \"objTipoEjecucion\": {\"enumTipoEjecucion\": \"DIARIA\"}\n}"
+						},
+						"url": "{{baseUrl}}/api/escaner/{{scannerId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "04 - Filtros - Gestión",
+			"item": [
+				{
+					"name": "Guardar Filtros al Escáner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+									"pm.test(\"Es array\", () => pm.expect(pm.response.json()).to.be.an('array'));",
+									"pm.test(\"Tiene 2 filtros\", () => pm.expect(pm.response.json().length).to.eql(2));",
+									"console.log(\"✅ Filtros guardados:\", pm.response.json().map(f => f.enumFiltro).join(', '));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"enumFiltro\": \"RSI\",\n    \"parametros\": [\n      {\"enumParametro\": \"PERIODO_RSI\", \"objValorSeleccionado\": {\"enumTipoValor\": \"INTEGER\", \"valor\": 14}},\n      {\"enumParametro\": \"SOBREVENTA_RSI\", \"objValorSeleccionado\": {\"enumTipoValor\": \"INTEGER\", \"valor\": 30}},\n      {\"enumParametro\": \"SOBRECOMPRA_RSI\", \"objValorSeleccionado\": {\"enumTipoValor\": \"INTEGER\", \"valor\": 70}}\n    ]\n  },\n  {\n    \"enumFiltro\": \"VOLUME\",\n    \"parametros\": [\n      {\"enumParametro\": \"VOLUMEN_MINIMO\", \"objValorSeleccionado\": {\"enumTipoValor\": \"INTEGER\", \"valor\": 1000000}}\n    ]\n  }\n]"
+						},
+						"url": "{{baseUrl}}/api/escaner/filtro/escaner/{{scannerId}}"
+					}
+				},
+				{
+					"name": "Obtener Filtros del Escáner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Es array\", () => pm.expect(pm.response.json()).to.be.an('array'));",
+									"pm.test(\"Tiene 2 filtros\", () => pm.expect(pm.response.json().length).to.eql(2));",
+									"console.log(\"✅ Filtros obtenidos:\", pm.response.json().length);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/filtro/escaner/{{scannerId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "05 - Estados - Gestión",
+			"item": [
+				{
+					"name": "Iniciar Escáner (ahora tiene filtros)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Estado INICIADO\", () => {",
+									"    pm.expect(pm.response.json().enumEstadoEscaner).to.eql('INICIADO');",
+									"});",
+									"console.log(\"✅ Escáner iniciado correctamente\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/estado/{{scannerId}}/iniciar"
+					}
+				},
+				{
+					"name": "Detener Escáner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Estado DETENIDO\", () => {",
+									"    pm.expect(pm.response.json().enumEstadoEscaner).to.eql('DETENIDO');",
+									"});",
+									"console.log(\"✅ Escáner detenido\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/estado/{{scannerId}}/detener"
+					}
+				},
+				{
+					"name": "Archivar Escáner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Estado ARCHIVADO\", () => {",
+									"    pm.expect(pm.response.json().enumEstadoEscaner).to.eql('ARCHIVADO');",
+									"});",
+									"console.log(\"✅ Escáner archivado\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/estado/{{scannerId}}/archivar"
+					}
+				},
+				{
+					"name": "Listar Escáneres Archivados",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Es array\", () => pm.expect(pm.response.json()).to.be.an('array'));",
+									"pm.test(\"Contiene nuestro escáner\", () => {",
+									"    const id = parseInt(pm.environment.get('scannerId'));",
+									"    const found = pm.response.json().some(s => s.idEscaner === id);",
+									"    pm.expect(found).to.be.true;",
+									"});",
+									"console.log(\"✅ Escáneres archivados:\", pm.response.json().length);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/archivados"
+					}
+				},
+				{
+					"name": "Desarchivar Escáner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Estado DETENIDO\", () => {",
+									"    pm.expect(pm.response.json().enumEstadoEscaner).to.eql('DETENIDO');",
+									"});",
+									"console.log(\"✅ Escáner desarchivado\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/estado/{{scannerId}}/desarchivar"
+					}
+				}
+			]
+		},
+		{
+			"name": "06 - Validaciones y Errores",
+			"item": [
+				{
+					"name": "ERROR - Crear sin nombre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+									"pm.test(\"Error GC-0005\", () => pm.expect(pm.response.json().codigoError).to.eql('GC-0005'));",
+									"pm.test(\"Mensaje menciona nombre\", () => pm.expect(pm.response.json().mensaje).to.include('nombre'));",
+									"console.log(\"✅ Validación nombre funciona\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"\",\n  \"descripcion\": \"Test sin nombre\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [{\"enumMercado\": \"NASDAQ\"}],\n  \"objTipoEjecucion\": {\"enumTipoEjecucion\": \"UNA_VEZ\"}\n}"
+						},
+						"url": "{{baseUrl}}/api/escaner"
+					}
+				},
+				{
+					"name": "ERROR - Crear sin mercados",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+									"pm.test(\"Error GC-0005\", () => pm.expect(pm.response.json().codigoError).to.eql('GC-0005'));",
+									"console.log(\"✅ Validación mercados funciona\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Scanner_No_Markets\",\n  \"descripcion\": \"Test sin mercados\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [],\n  \"objTipoEjecucion\": {\"enumTipoEjecucion\": \"UNA_VEZ\"}\n}"
+						},
+						"url": "{{baseUrl}}/api/escaner"
+					}
+				},
+				{
+					"name": "ERROR - Nombre duplicado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 406\", () => pm.response.to.have.status(406));",
+									"pm.test(\"Error GC-0002\", () => pm.expect(pm.response.json().codigoError).to.eql('GC-0002'));",
+									"console.log(\"✅ Error nombre duplicado funciona\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"{{scannerName}}\",\n  \"descripcion\": \"Nombre duplicado\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [{\"enumMercado\": \"NASDAQ\"}],\n  \"objTipoEjecucion\": {\"enumTipoEjecucion\": \"UNA_VEZ\"}\n}"
+						},
+						"url": "{{baseUrl}}/api/escaner"
+					}
+				},
+				{
+					"name": "ERROR - Obtener ID inexistente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 406\", () => pm.response.to.have.status(406));",
+									"pm.test(\"Error GC-0003\", () => pm.expect(pm.response.json().codigoError).to.eql('GC-0003'));",
+									"console.log(\"✅ Error entidad no encontrada funciona\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/999999"
+					}
+				},
+				{
+					"name": "ERROR - Filtro RSI con periodo inválido (< 2)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400\", () => pm.response.to.have.status(400));",
+									"pm.test(\"Error GC-0005\", () => pm.expect(pm.response.json().codigoError).to.eql('GC-0005'));",
+									"pm.test(\"Tiene erroresValidacion\", () => {",
+									"    pm.expect(pm.response.json()).to.have.property('erroresValidacion');",
+									"    pm.expect(pm.response.json().erroresValidacion).to.be.an('array');",
+									"});",
+									"pm.test(\"Error es del filtro RSI\", () => {",
+									"    const errors = pm.response.json().erroresValidacion;",
+									"    const rsiError = errors.find(e => e.filtro === 'RSI');",
+									"    pm.expect(rsiError).to.exist;",
+									"    pm.expect(rsiError.parametro).to.eql('PERIODO_RSI');",
+									"});",
+									"console.log(\"✅ Validación filtro RSI funciona\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n  {\n    \"enumFiltro\": \"RSI\",\n    \"parametros\": [\n      {\"enumParametro\": \"PERIODO_RSI\", \"objValorSeleccionado\": {\"enumTipoValor\": \"INTEGER\", \"valor\": 1}},\n      {\"enumParametro\": \"SOBREVENTA_RSI\", \"objValorSeleccionado\": {\"enumTipoValor\": \"INTEGER\", \"valor\": 30}},\n      {\"enumParametro\": \"SOBRECOMPRA_RSI\", \"objValorSeleccionado\": {\"enumTipoValor\": \"INTEGER\", \"valor\": 70}}\n    ]\n  }\n]"
+						},
+						"url": "{{baseUrl}}/api/escaner/filtro/escaner/{{scannerId}}"
+					}
+				},
+				{
+					"name": "Crear Escáner Temporal - SIN FILTROS",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.set('scannerNoFiltersName', \"Scanner_NoFilters_\" + Date.now());"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 201\", () => pm.response.to.have.status(201));",
+									"pm.test(\"Tiene ID\", () => {",
+									"    const json = pm.response.json();",
+									"    pm.expect(json).to.have.property('idEscaner');",
+									"    pm.environment.set('scannerNoFiltersId', json.idEscaner);",
+									"});",
+									"console.log('✅ Escáner sin filtros creado ID:', pm.response.json().idEscaner);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"{{scannerNoFiltersName}}\",\n  \"descripcion\": \"Escáner sin filtros para validar regla de negocio\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [{\"enumMercado\": \"NASDAQ\"}],\n  \"objTipoEjecucion\": {\"enumTipoEjecucion\": \"UNA_VEZ\"}\n}"
+						},
+						"url": "{{baseUrl}}/api/escaner"
+					}
+				},
+				{
+					"name": "ERROR - Iniciar escáner SIN FILTROS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 400 o 406\", () => {",
+									"    pm.expect([400, 406]).to.include(pm.response.code);",
+									"});",
+									"pm.test(\"Error indica falta de filtros\", () => {",
+									"    const json = pm.response.json();",
+									"    const msg = json.mensaje.toLowerCase();",
+									"    pm.expect(msg).to.satisfy(m => m.includes('filtro') || m.includes('filter'));",
+									"});",
+									"console.log('✅ Regla de negocio: No se puede iniciar sin filtros');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/estado/{{scannerNoFiltersId}}/iniciar"
+					}
+				},
+				{
+					"name": "Cleanup - Eliminar Escáner Sin Filtros",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"console.log('✅ Escáner sin filtros eliminado');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/{{scannerNoFiltersId}}"
+					}
+				}
+			]
+		},
+		{
+			"name": "07 - Cleanup",
+			"item": [
+				{
+					"name": "Eliminar Escáner de Prueba",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200\", () => pm.response.to.have.status(200));",
+									"pm.test(\"Retorna true\", () => pm.expect(pm.response.json()).to.be.true);",
+									"console.log(\"✅ Escáner eliminado\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{baseUrl}}/api/escaner/{{scannerId}}"
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "default"
+		},
+		{
+			"key": "scannerId",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "scannerName",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "scannerNoFiltersId",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "scannerNoFiltersName",
+			"value": "",
+			"type": "default"
+		}
+	]
+}

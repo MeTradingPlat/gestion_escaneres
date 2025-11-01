@@ -113,11 +113,11 @@ public class FiltroFactoryNewCandleHighLow implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarString(EnumParametro.OPCION_EXTREMO_NEW_CANDLE,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.OPCION_EXTREMO_NEW_CANDLE,
                 valoresSeleccionados.get(EnumParametro.OPCION_EXTREMO_NEW_CANDLE), EnumOpcionExtremo.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_NEW_CANDLE,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_NEW_CANDLE,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_NEW_CANDLE), EnumTimeframe.class)
                 .ifPresent(errores::add);
 

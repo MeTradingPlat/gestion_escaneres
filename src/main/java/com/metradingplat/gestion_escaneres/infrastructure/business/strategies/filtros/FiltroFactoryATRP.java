@@ -157,22 +157,22 @@ public class FiltroFactoryATRP implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.1f, 50.0f)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.1f, 50.0f)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_ATRP, valoresSeleccionados.get(EnumParametro.TIMEFRAME_ATRP),
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_ATRP, valoresSeleccionados.get(EnumParametro.TIMEFRAME_ATRP),
                 EnumTimeframe.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarInteger(EnumParametro.PERIODO_ATR_ATRP, valoresSeleccionados.get(EnumParametro.PERIODO_ATR_ATRP),
+        this.objValidador.validarInteger(this.enumFiltro, EnumParametro.PERIODO_ATR_ATRP, valoresSeleccionados.get(EnumParametro.PERIODO_ATR_ATRP),
                 5, 100)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIPO_PROMEDIO_MOVIL_ATRP,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIPO_PROMEDIO_MOVIL_ATRP,
                 valoresSeleccionados.get(EnumParametro.TIPO_PROMEDIO_MOVIL_ATRP), EnumModoPromedioMovil.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarFloat(EnumParametro.VALOR_PROMEDIO_MOVIL_ATRP,
+        this.objValidador.validarFloat(this.enumFiltro, EnumParametro.VALOR_PROMEDIO_MOVIL_ATRP,
                 valoresSeleccionados.get(EnumParametro.VALOR_PROMEDIO_MOVIL_ATRP), 0.0f, Float.MAX_VALUE)
                 .ifPresent(errores::add);
 

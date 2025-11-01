@@ -103,7 +103,7 @@ public class FiltroFactoryShortInterest implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
         
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F, 100.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F, 100.0F)
                 .ifPresent(errores::add);
 
         return errores;

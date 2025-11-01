@@ -117,10 +117,10 @@ public class FiltroFactoryPercentageChange implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), -95.0F, 2_000.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), -95.0F, 2_000.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_PERCENTAGE_CHANGE_PERCENT,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_PERCENTAGE_CHANGE_PERCENT,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_PERCENTAGE_CHANGE_PERCENT), EnumTimeframe.class)
                 .ifPresent(errores::add);
         

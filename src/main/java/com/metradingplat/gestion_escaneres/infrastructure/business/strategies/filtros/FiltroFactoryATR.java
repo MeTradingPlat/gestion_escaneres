@@ -99,7 +99,7 @@ public class FiltroFactoryATR implements IFiltroFactory {
             enumTipoValor,
             enumCondicional,
             valorUsuario != null && valorUsuario.getIsInteger() != null ? valorUsuario.getIsInteger() : false,
-            valorUsuario != null ? valorUsuario.getValor1() : -0.10F,
+            valorUsuario != null ? valorUsuario.getValor1() : 0.01F,
             valorUsuario != null ? valorUsuario.getValor2() : 5.0F
         );
         return new Parametro(EnumParametro.CONDICION, EnumParametro.CONDICION.getEtiqueta(), valor, opciones);
@@ -144,17 +144,17 @@ public class FiltroFactoryATR implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.01f, 50.0f)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.01f, 50.0f)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarInteger(EnumParametro.LONGITUD_ATR, valoresSeleccionados.get(EnumParametro.LONGITUD_ATR), 5, 100)
+        this.objValidador.validarInteger(this.enumFiltro, EnumParametro.LONGITUD_ATR, valoresSeleccionados.get(EnumParametro.LONGITUD_ATR), 5, 100)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.MODO_PROMEDIO_MOVIL_ATR,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.MODO_PROMEDIO_MOVIL_ATR,
                 valoresSeleccionados.get(EnumParametro.MODO_PROMEDIO_MOVIL_ATR), EnumModoPromedioMovil.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_ATR, valoresSeleccionados.get(EnumParametro.TIMEFRAME_ATR),
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_ATR, valoresSeleccionados.get(EnumParametro.TIMEFRAME_ATR),
                 EnumTimeframe.class)
                 .ifPresent(errores::add);
 

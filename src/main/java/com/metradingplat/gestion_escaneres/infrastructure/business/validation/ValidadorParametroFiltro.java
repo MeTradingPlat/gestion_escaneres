@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.valores.IEnumValores;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
@@ -37,71 +38,76 @@ public class ValidadorParametroFiltro {
     /**
      * Valida un valor condicional (rango numérico con operadores).
      *
+     * @param enumFiltro El filtro al que pertenece el parámetro (contexto del error)
      * @param enumParametro El parámetro que se está validando
      * @param valor El valor a validar
      * @param min Valor mínimo permitido
      * @param max Valor máximo permitido
      * @return Optional con ResultadoValidacion si hay error, Optional.empty() si es válido
      */
-    public Optional<ResultadoValidacion> validarCondicional(EnumParametro enumParametro, Valor valor, Float min, Float max){
+    public Optional<ResultadoValidacion> validarCondicional(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor, Float min, Float max){
         IValidacionFiltro estrategiaValidacion = crearEstrategiaCondicional(min, max);
-        return estrategiaValidacion.validar(enumParametro, valor);
+        return estrategiaValidacion.validar(enumFiltro, enumParametro, valor);
     }
 
     /**
      * Valida un valor de tipo Float dentro de un rango.
      *
+     * @param enumFiltro El filtro al que pertenece el parámetro (contexto del error)
      * @param enumParametro El parámetro que se está validando
      * @param valor El valor a validar
      * @param min Valor mínimo permitido
      * @param max Valor máximo permitido
      * @return Optional con ResultadoValidacion si hay error, Optional.empty() si es válido
      */
-    public Optional<ResultadoValidacion> validarFloat(EnumParametro enumParametro, Valor valor, Float min, Float max){
+    public Optional<ResultadoValidacion> validarFloat(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor, Float min, Float max){
         IValidacionFiltro estrategiaValidacion = crearEstrategiaFloat(min, max);
-        return estrategiaValidacion.validar(enumParametro, valor);
+        return estrategiaValidacion.validar(enumFiltro, enumParametro, valor);
     }
 
     /**
      * Valida un valor de tipo Integer dentro de un rango.
      *
+     * @param enumFiltro El filtro al que pertenece el parámetro (contexto del error)
      * @param enumParametro El parámetro que se está validando
      * @param valor El valor a validar
      * @param min Valor mínimo permitido
      * @param max Valor máximo permitido
      * @return Optional con ResultadoValidacion si hay error, Optional.empty() si es válido
      */
-    public Optional<ResultadoValidacion> validarInteger(EnumParametro enumParametro, Valor valor, float min, float max) {
+    public Optional<ResultadoValidacion> validarInteger(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor, float min, float max) {
         IValidacionFiltro estrategiaValidacion = crearEstrategiaInteger((int) min, (int) max);
-        return estrategiaValidacion.validar(enumParametro, valor);
+        return estrategiaValidacion.validar(enumFiltro, enumParametro, valor);
     }
 
     /**
      * Valida un valor de tipo String contra una enumeración.
      *
      * @param <E> Tipo de la enumeración
+     * @param enumFiltro El filtro al que pertenece el parámetro (contexto del error)
      * @param enumParametro El parámetro que se está validando
      * @param valor El valor a validar
      * @param enumOpciones Clase de la enumeración con valores válidos
      * @return Optional con ResultadoValidacion si hay error, Optional.empty() si es válido
      */
-    public <E extends Enum<E>> Optional<ResultadoValidacion> validarString(EnumParametro enumParametro, Valor valor, Class<E> enumOpciones) {
+    public <E extends Enum<E>> Optional<ResultadoValidacion> validarString(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor, Class<E> enumOpciones) {
         IValidacionFiltro estrategiaValidacion = crearEstrategiaString(enumOpciones);
-        return estrategiaValidacion.validar(enumParametro, valor);
+        return estrategiaValidacion.validar(enumFiltro, enumParametro, valor);
     }
 
     /**
      * Valida un valor de tipo String contra una lista de opciones permitidas.
      *
      * @param <E> Tipo de la enumeración con valores permitidos
+     * @param enumFiltro El filtro al que pertenece el parámetro (contexto del error)
      * @param enumParametro El parámetro que se está validando
      * @param valor El valor a validar
      * @param opcionesPermitidas Lista de opciones válidas
      * @return Optional con ResultadoValidacion si hay error, Optional.empty() si es válido
      */
-    public <E extends Enum<E> & IEnumValores> Optional<ResultadoValidacion> validarStringConOpciones(EnumParametro enumParametro, Valor valor, List<E> opcionesPermitidas) {
+    public <E extends Enum<E> & IEnumValores> Optional<ResultadoValidacion> validarStringConOpciones(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor, List<E> opcionesPermitidas) {
         IValidacionFiltro estrategiaValidacion = crearEstrategiaStringConOpciones(opcionesPermitidas);
-        return estrategiaValidacion.validar(enumParametro, valor);
+        return estrategiaValidacion.validar(enumFiltro, enumParametro, valor);
     }
 
     // ========== Factory Methods (privados) ==========

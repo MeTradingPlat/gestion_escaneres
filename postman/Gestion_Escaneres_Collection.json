@@ -1,0 +1,399 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Gestión Escáneres - Suite Completa (FIXED)",
+		"description": "Colección profesional de pruebas para el módulo de Gestión de Escáneres.\n\n**VERSIÓN CORREGIDA:**\n- Request bodies match DTO structure exactly\n- Removed 'etiqueta' fields from requests (only in responses)\n- Fixed enum values (CONTINUO → UNA_VEZ)\n\n**Características:**\n- Tests automáticos con validaciones\n- Manejo de variables de entorno\n- Casos de éxito y error\n- Validación de estructura de respuesta\n- Tests de reglas de negocio\n\n**Variables necesarias:**\n- `baseUrl`: http://localhost:8080 (Gateway) o http://localhost:8081 (Direct)\n- `scannerId`: Se auto-genera en los tests\n- `scannerName`: Nombre único del escáner",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "01 - Health & Setup",
+			"item": [
+				{
+					"name": "Health Check - Verificar servicio activo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"    pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"console.log(\"✅ Servicio de Gestión de Escáneres está activo\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/actuator/health",
+							"host": ["{{baseUrl}}"],
+							"path": ["actuator", "health"]
+						},
+						"description": "Verifica que el servicio esté levantado y respondiendo correctamente."
+					},
+					"response": []
+				}
+			],
+			"description": "Tests iniciales para verificar que el servicio está funcionando."
+		},
+		{
+			"name": "02 - CRUD Escáneres (Happy Path)",
+			"item": [
+				{
+					"name": "Crear Escáner - Caso Exitoso",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Generar nombre único para evitar conflictos",
+									"const timestamp = Date.now();",
+									"pm.environment.set(\"scannerName\", `Scanner_Test_${timestamp}`);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201 Created\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response has all required fields\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('idEscaner');",
+									"    pm.expect(jsonData).to.have.property('nombre');",
+									"    pm.expect(jsonData).to.have.property('descripcion');",
+									"    pm.expect(jsonData).to.have.property('horaInicio');",
+									"    pm.expect(jsonData).to.have.property('horaFin');",
+									"    pm.expect(jsonData).to.have.property('objEstado');",
+									"    pm.expect(jsonData).to.have.property('mercados');",
+									"    pm.expect(jsonData).to.have.property('objTipoEjecucion');",
+									"    pm.expect(jsonData).to.have.property('fechaCreacion');",
+									"});",
+									"",
+									"pm.test(\"Scanner name matches request\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.nombre).to.eql(pm.environment.get(\"scannerName\"));",
+									"});",
+									"",
+									"pm.test(\"Initial state is DETENIDO\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.objEstado.enumEstadoEscaner).to.eql(\"DETENIDO\");",
+									"});",
+									"",
+									"pm.test(\"Markets array is not empty\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.mercados).to.be.an('array').that.is.not.empty;",
+									"});",
+									"",
+									"// Guardar ID para pruebas posteriores",
+									"var jsonData = pm.response.json();",
+									"pm.environment.set(\"scannerId\", jsonData.idEscaner);",
+									"",
+									"console.log(\"✅ Escáner creado exitosamente con ID:\", jsonData.idEscaner);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"{{scannerName}}\",\n  \"descripcion\": \"Escáner de prueba para validar funcionalidad básica del sistema\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [\n    {\"enumMercado\": \"NASDAQ\"},\n    {\"enumMercado\": \"NYSE\"}\n  ],\n  \"objTipoEjecucion\": {\n    \"enumTipoEjecucion\": \"UNA_VEZ\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/escaner",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "escaner"]
+						},
+						"description": "Crea un nuevo escáner con datos válidos. Este es el caso de éxito (happy path)."
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Escáneres Activos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});",
+									"",
+									"pm.test(\"List contains our scanner\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    var scannerId = parseInt(pm.environment.get(\"scannerId\"));",
+									"    var found = jsonData.some(s => s.idEscaner === scannerId);",
+									"    pm.expect(found).to.be.true;",
+									"});",
+									"",
+									"console.log(\"✅ Total de escáneres activos:\", pm.response.json().length);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/escaner",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "escaner"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Escáner",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Description was updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.descripcion).to.include(\"ACTUALIZADO\");",
+									"});",
+									"",
+									"pm.test(\"Time range was updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.horaInicio).to.eql(\"08:00:00\");",
+									"    pm.expect(jsonData.horaFin).to.eql(\"17:30:00\");",
+									"});",
+									"",
+									"console.log(\"✅ Escáner actualizado exitosamente\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"{{scannerName}}\",\n  \"descripcion\": \"Escáner ACTUALIZADO - Nueva descripción para pruebas\",\n  \"horaInicio\": \"08:00:00\",\n  \"horaFin\": \"17:30:00\",\n  \"mercados\": [\n    {\"enumMercado\": \"NASDAQ\"}\n  ],\n  \"objTipoEjecucion\": {\n    \"enumTipoEjecucion\": \"DIARIA\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/escaner/{{scannerId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "escaner", "{{scannerId}}"]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests de operaciones CRUD básicas con casos de éxito."
+		},
+		{
+			"name": "03 - Validaciones y Errores",
+			"item": [
+				{
+					"name": "ERROR - Crear escáner con nombre duplicado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 406 Not Acceptable\", function () {",
+									"    pm.response.to.have.status(406);",
+									"});",
+									"",
+									"pm.test(\"Error response has standard structure\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('codigoError');",
+									"    pm.expect(jsonData).to.have.property('mensaje');",
+									"    pm.expect(jsonData).to.have.property('codigoHttp');",
+									"});",
+									"",
+									"pm.test(\"Error code is GC-0002 (Entity Already Exists)\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.codigoError).to.eql(\"GC-0002\");",
+									"});",
+									"",
+									"console.log(\"✅ Error de nombre duplicado detectado correctamente\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"{{scannerName}}\",\n  \"descripcion\": \"Este nombre ya existe\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [\n    {\"enumMercado\": \"NASDAQ\"}\n  ],\n  \"objTipoEjecucion\": {\n    \"enumTipoEjecucion\": \"UNA_VEZ\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/escaner",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "escaner"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ERROR - Crear escáner sin nombre",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Error response has standard structure\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('codigoError');",
+									"    pm.expect(jsonData).to.have.property('mensaje');",
+									"    pm.expect(jsonData.mensaje).to.include('nombre');",
+									"});",
+									"",
+									"pm.test(\"Error code is GC-0005\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.codigoError).to.eql(\"GC-0005\");",
+									"});",
+									"",
+									"console.log(\"✅ Validación de campo requerido funciona correctamente\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"\",\n  \"descripcion\": \"Test sin nombre\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [\n    {\"enumMercado\": \"NASDAQ\"}\n  ],\n  \"objTipoEjecucion\": {\n    \"enumTipoEjecucion\": \"UNA_VEZ\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/escaner",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "escaner"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ERROR - Crear escáner sin mercados",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400 Bad Request\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});",
+									"",
+									"pm.test(\"Error indicates missing markets\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.codigoError).to.eql(\"GC-0005\");",
+									"});",
+									"",
+									"console.log(\"✅ Validación de mercados requeridos funciona\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nombre\": \"Scanner_No_Markets\",\n  \"descripcion\": \"Test sin mercados\",\n  \"horaInicio\": \"09:30:00\",\n  \"horaFin\": \"16:00:00\",\n  \"mercados\": [],\n  \"objTipoEjecucion\": {\n    \"enumTipoEjecucion\": \"UNA_VEZ\"\n  }\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/escaner",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "escaner"]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Tests de validación y manejo de errores."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script global que se ejecuta antes de cada request",
+					"console.log(\"🚀 Ejecutando:\", pm.info.requestName);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Script global que se ejecuta después de cada request",
+					"console.log(\"⏱️ Tiempo de respuesta:\", pm.response.responseTime, \"ms\");"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "default"
+		}
+	]
+}

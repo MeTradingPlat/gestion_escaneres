@@ -131,11 +131,11 @@ public class FiltroFactoryVolume implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F,
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F,
                 1_000_000_000.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIPO_VOLUMEN, valoresSeleccionados.get(EnumParametro.TIPO_VOLUMEN),
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIPO_VOLUMEN, valoresSeleccionados.get(EnumParametro.TIPO_VOLUMEN),
                 EnumTipoVolumen.class)
                 .ifPresent(errores::add);
 
@@ -145,7 +145,7 @@ public class FiltroFactoryVolume implements IFiltroFactory {
             EnumTimeframe._3H, EnumTimeframe._4H, EnumTimeframe._12H, EnumTimeframe._1D, EnumTimeframe._2D,
             EnumTimeframe._3D
         );
-        this.objValidador.validarStringConOpciones(EnumParametro.TIMEFRAME_VOLUME,
+        this.objValidador.validarStringConOpciones(this.enumFiltro, EnumParametro.TIMEFRAME_VOLUME,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_VOLUME), allowedTimeframesVolume)
                 .ifPresent(errores::add);
         

@@ -113,11 +113,11 @@ public class FiltroFactoryBreakOverRecentHighsLows implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarString(EnumParametro.OPCION_EXTREMO_BREAK_OVER,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.OPCION_EXTREMO_BREAK_OVER,
                 valoresSeleccionados.get(EnumParametro.OPCION_EXTREMO_BREAK_OVER), EnumOpcionExtremo.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_BREAK_OVER,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_BREAK_OVER,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_BREAK_OVER), EnumTimeframe.class)
                 .ifPresent(errores::add);
 

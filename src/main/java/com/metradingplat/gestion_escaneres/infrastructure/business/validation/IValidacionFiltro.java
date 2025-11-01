@@ -4,6 +4,7 @@ import com.metradingplat.gestion_escaneres.application.dto.ResultadoValidacion;
 
 import java.util.Optional;
 
+import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
 
@@ -28,7 +29,7 @@ import com.metradingplat.gestion_escaneres.domain.models.Valor;
  * <p><b>Ejemplo de uso:</b>
  * <pre>{@code
  * IValidacionFiltro estrategia = new ValidacionFloat(0f, 100f);
- * Optional<ResultadoValidacion> resultado = estrategia.validar(parametro, valor);
+ * Optional<ResultadoValidacion> resultado = estrategia.validar(EnumFiltro.RSI, parametro, valor);
  *
  * if (resultado.isPresent()) {
  *     // La validación falló
@@ -47,10 +48,15 @@ public interface IValidacionFiltro {
     /**
      * Valida un valor según las reglas específicas de la estrategia implementada.
      *
-     * @param enumParametro El parámetro que se está validando (usado para mensajes de error)
+     * <p>El parámetro enumFiltro se incluye para proporcionar contexto completo
+     * en los mensajes de error, permitiendo al frontend identificar exactamente
+     * a qué filtro pertenece cada error de validación de parámetro.
+     *
+     * @param enumFiltro El filtro al que pertenece el parámetro (contexto del error)
+     * @param enumParametro El parámetro que se está validando
      * @param valor El valor a validar
      * @return Optional.empty() si la validación es exitosa,
      *         Optional con ResultadoValidacion si hay errores de validación
      */
-    Optional<ResultadoValidacion> validar(EnumParametro enumParametro, Valor valor);
+    Optional<ResultadoValidacion> validar(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor);
 }

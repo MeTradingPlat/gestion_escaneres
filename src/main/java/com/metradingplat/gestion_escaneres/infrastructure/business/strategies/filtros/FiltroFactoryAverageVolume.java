@@ -117,10 +117,10 @@ public class FiltroFactoryAverageVolume implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 1_000.0F, 500_000_000.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 1_000.0F, 500_000_000.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_AVERAGE_VOLUME,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_AVERAGE_VOLUME,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_AVERAGE_VOLUME), EnumTimeframe.class)
                 .ifPresent(errores::add);
 

@@ -130,16 +130,16 @@ public class FiltroFactoryRSI implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F, 100.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F, 100.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarInteger(EnumParametro.PERIODO_RSI, valoresSeleccionados.get(EnumParametro.PERIODO_RSI), 2, 50)
+        this.objValidador.validarInteger(this.enumFiltro, EnumParametro.PERIODO_RSI, valoresSeleccionados.get(EnumParametro.PERIODO_RSI), 2, 50)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_RSI, valoresSeleccionados.get(EnumParametro.TIMEFRAME_RSI),
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_RSI, valoresSeleccionados.get(EnumParametro.TIMEFRAME_RSI),
                 EnumTimeframe.class)
                 .ifPresent(errores::add);
-        
+
         return errores;
     }
 }

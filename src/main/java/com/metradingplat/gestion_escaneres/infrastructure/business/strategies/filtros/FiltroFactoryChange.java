@@ -131,14 +131,14 @@ public class FiltroFactoryChange implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), -1000.0F, 1000.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), -1000.0F, 1000.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.PUNTO_REFERENCIA_CHANGE,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.PUNTO_REFERENCIA_CHANGE,
                 valoresSeleccionados.get(EnumParametro.PUNTO_REFERENCIA_CHANGE), EnumPuntoReferencia.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIPO_MEDIDA_CHANGE,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIPO_MEDIDA_CHANGE,
                 valoresSeleccionados.get(EnumParametro.TIPO_MEDIDA_CHANGE), EnumTipoValorMedida.class)
                 .ifPresent(errores::add);
 

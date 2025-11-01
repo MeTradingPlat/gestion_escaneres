@@ -3,7 +3,8 @@ package com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsCont
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import com.metradingplat.gestion_escaneres.application.output.FuenteMensajesIntPort;
-import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
+import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.dto.ValidationErrorDetail;
+import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.dto.ValidationErrorResponse;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.exceptionStructure.CodigoError;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.exceptionStructure.Error;
 import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsController.exceptionStructure.ErrorUtils;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestControllerAdvice
@@ -89,29 +92,98 @@ public class RestApiExceptionHandler {
         );
     }
 
+    /**
+     * Maneja excepciones de validación de filtros.
+     *
+     * Convierte los errores de validación del dominio en una respuesta estructurada
+     * que incluye contexto completo (filtro + parámetro) para cada error.
+     *
+     * Esta implementación sigue mejores prácticas:
+     * - Respuesta estructurada y consistente con otros errores
+     * - Incluye información de trazabilidad (URL, método HTTP)
+     * - Mapea correctamente el contexto de filtro para el frontend
+     * - Internacionaliza los mensajes de error
+     *
+     * @param ex Excepción que contiene los errores de validación con contexto de filtro
+     * @param req Request HTTP para información de trazabilidad
+     * @return ResponseEntity con estructura ValidationErrorResponse
+     */
     @ExceptionHandler(ValidacionFiltroException.class)
-    public ResponseEntity<Map<EnumParametro, String>> handleValidationFiltroExceptions(ValidacionFiltroException ex, HttpServletRequest req) {
-        Map<EnumParametro, String> errores = new HashMap<>();
+    public ResponseEntity<ValidationErrorResponse> handleValidationFiltroExceptions(
+            ValidacionFiltroException ex,
+            HttpServletRequest req) {
+
+        // Mapear errores de validación a detalles estructurados
+        List<ValidationErrorDetail> erroresDetallados = new ArrayList<>();
 
         ex.getErroresValidacion().forEach(errorValidacion -> {
-            String mensaje = internacionalizarMensaje(errorValidacion.mensaje(), errorValidacion.args());
-            errores.put(errorValidacion.enumParametro(), mensaje);
+            String mensajeInternacionalizado = internacionalizarMensaje(
+                errorValidacion.mensaje(),
+                errorValidacion.args()
+            );
+
+            ValidationErrorDetail detalle = ValidationErrorDetail.builder()
+                .filtro(errorValidacion.enumFiltro().name())
+                .parametro(errorValidacion.enumParametro().name())
+                .mensaje(mensajeInternacionalizado)
+                .filtroIndex(null) // Se podría calcular si hay múltiples filtros del mismo tipo
+                .build();
+
+            erroresDetallados.add(detalle);
         });
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+        // Construir respuesta completa usando el builder
+        ValidationErrorResponse response = ValidationErrorResponse.builder()
+            .codigoError(CodigoError.VIOLACION_REGLA_DE_NEGOCIO.getCodigo())
+            .mensaje(internacionalizarMensaje("error.validacion.filtros"))
+            .codigoHttp(HttpStatus.BAD_REQUEST.value())
+            .url(req.getRequestURL().toString())
+            .metodo(req.getMethod())
+            .erroresValidacion(erroresDetallados)
+            .build();
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    /**
+     * Maneja excepciones de validación de Bean Validation (JSR-380).
+     *
+     * Se activa cuando las anotaciones @Valid, @NotNull, @NotBlank, @Size, etc.
+     * fallan en los DTOs de petición.
+     *
+     * Devuelve una estructura de error RFC 7807 consistente con el resto del sistema.
+     *
+     * @param ex Excepción que contiene los errores de validación
+     * @param req Request HTTP para información de trazabilidad
+     * @return ResponseEntity con estructura Error estándar
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errores = new HashMap<>();
-        
+    public ResponseEntity<Error> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest req) {
+        // Construir mensaje con todos los campos inválidos
+        StringBuilder mensajeCompleto = new StringBuilder();
+        Map<String, String> erroresDetallados = new HashMap<>();
+
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String campo = ((FieldError) error).getField();
             String mensajeDeError = internacionalizarMensaje(error.getDefaultMessage(), error.getArguments());
-            errores.put(campo, mensajeDeError);
+            erroresDetallados.put(campo, mensajeDeError);
+
+            if (mensajeCompleto.length() > 0) {
+                mensajeCompleto.append("; ");
+            }
+            mensajeCompleto.append(campo).append(": ").append(mensajeDeError);
         });
-        
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+
+        // Crear error siguiendo RFC 7807
+        Error error = ErrorUtils.crearError(
+            CodigoError.VIOLACION_REGLA_DE_NEGOCIO.getCodigo(),
+            mensajeCompleto.toString(),
+            HttpStatus.BAD_REQUEST.value(),
+            req.getRequestURL().toString(),
+            req.getMethod()
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     

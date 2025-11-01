@@ -130,14 +130,14 @@ public class FiltroFactoryConsecutiveCandles implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), -20.0F, 20.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), -20.0F, 20.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarInteger(EnumParametro.NUMERO_VELAS_CONSECUTIVAS,
+        this.objValidador.validarInteger(this.enumFiltro, EnumParametro.NUMERO_VELAS_CONSECUTIVAS,
                 valoresSeleccionados.get(EnumParametro.NUMERO_VELAS_CONSECUTIVAS), 2, 20)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_CONSECUTIVE_CANDLES,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_CONSECUTIVE_CANDLES,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_CONSECUTIVE_CANDLES), EnumTimeframe.class)
                 .ifPresent(errores::add);
 

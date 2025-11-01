@@ -12,11 +12,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.metradingplat.gestion_escaneres.infrastructure.input.validation.ValidTimeRange;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@ValidTimeRange(startField = "horaInicio", endField = "horaFin", message = "validation.scanner.timeRange.invalid")
 public class EscanerDTOPeticion {
     @NotBlank(message = "validation.scanner.name.required")
     @Size(min = 3, max = 100, message = "validation.scanner.name.size")
@@ -33,11 +35,9 @@ public class EscanerDTOPeticion {
     private LocalTime horaFin;
 
     @NotNull(message = "validation.scanner.executionType.required")
-    @Valid
     private TipoEjecucionDTOPeticion objTipoEjecucion;
 
     @NotNull(message = "validation.scanner.market.required")
     @NotEmpty(message = "validation.scanner.market.empty")
-    @Valid
     private List<MercadoDTOPeticion> mercados;
 }

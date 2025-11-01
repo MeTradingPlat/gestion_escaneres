@@ -4,6 +4,7 @@ import com.metradingplat.gestion_escaneres.application.dto.ResultadoValidacion;
 
 import java.util.Optional;
 
+import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
 import com.metradingplat.gestion_escaneres.domain.models.ValorFloat;
@@ -18,29 +19,29 @@ public class ValidacionFloat implements IValidacionFiltro{
     }
 
     @Override
-    public Optional<ResultadoValidacion> validar(EnumParametro enumParametro, Valor valor) {
+    public Optional<ResultadoValidacion> validar(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor) {
         if (valor == null) {
-            return resultado("validation.parameter.value.required", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.value.required");
         }
 
         if (!(valor instanceof ValorFloat valorFloat)) {
-            return resultado("validation.format.invalid", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.format.invalid");
         }
 
         Float contenido = valorFloat.getValor();
 
         if (contenido == null) {
-            return resultado("validation.parameter.value.required", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.value.required");
         }
 
         if (contenido < min || contenido > max) {
-            return resultado("validation.parameter.values.outOfRange", enumParametro, min, max);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.values.outOfRange", min, max);
         }
 
         return Optional.empty();
     }
 
-    private Optional<ResultadoValidacion> resultado(String mensaje, EnumParametro parametro, Object... args) {
-        return Optional.of(new ResultadoValidacion(parametro, mensaje, args));
+    private Optional<ResultadoValidacion> resultado(EnumFiltro filtro, EnumParametro parametro, String mensaje, Object... args) {
+        return Optional.of(new ResultadoValidacion(filtro, parametro, mensaje, args));
     }
 }

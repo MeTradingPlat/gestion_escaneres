@@ -113,11 +113,11 @@ public class FiltroFactoryBearishBullishEngulfingCandle implements IFiltroFactor
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_BEARISH_BULLISH_ENGULFING_CANDLE,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_BEARISH_BULLISH_ENGULFING_CANDLE,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_BEARISH_BULLISH_ENGULFING_CANDLE), EnumTimeframe.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIPO_PATRON_BEARISH_BULLISH_ENGULFING_CANDLE,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIPO_PATRON_BEARISH_BULLISH_ENGULFING_CANDLE,
                 valoresSeleccionados.get(EnumParametro.TIPO_PATRON_BEARISH_BULLISH_ENGULFING_CANDLE),
                 EnumTipoPatron.class)
                 .ifPresent(errores::add);

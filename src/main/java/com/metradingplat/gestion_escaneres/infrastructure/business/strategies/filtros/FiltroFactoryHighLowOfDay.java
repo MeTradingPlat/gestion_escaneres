@@ -113,11 +113,11 @@ public class FiltroFactoryHighLowOfDay implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarString(EnumParametro.OPCION_EXTREMO_HIGH_LOW_DAY,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.OPCION_EXTREMO_HIGH_LOW_DAY,
                 valoresSeleccionados.get(EnumParametro.OPCION_EXTREMO_HIGH_LOW_DAY), EnumOpcionExtremo.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_HIGH_LOW_DAY,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_HIGH_LOW_DAY,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_HIGH_LOW_DAY), EnumTimeframe.class)
                 .ifPresent(errores::add);
 

@@ -117,10 +117,10 @@ public class FiltroFactoryPositionInRange implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F, 100.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F, 100.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_POSITION_IN_RANGE,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_POSITION_IN_RANGE,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_POSITION_IN_RANGE), EnumTimeframe.class)
                 .ifPresent(errores::add);
 

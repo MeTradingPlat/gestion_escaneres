@@ -116,10 +116,10 @@ public class FiltroFactoryMinutosInMarket implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 1.0F, 390.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 1.0F, 390.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarInteger(EnumParametro.MINUTOS_TRANSCURRIDOS,
+        this.objValidador.validarInteger(this.enumFiltro, EnumParametro.MINUTOS_TRANSCURRIDOS,
                 valoresSeleccionados.get(EnumParametro.MINUTOS_TRANSCURRIDOS), 1, 390)
                 .ifPresent(errores::add);
 

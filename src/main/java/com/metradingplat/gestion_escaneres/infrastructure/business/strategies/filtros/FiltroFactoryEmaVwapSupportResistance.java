@@ -105,7 +105,7 @@ public class FiltroFactoryEmaVwapSupportResistance implements IFiltroFactory {
         ValorInteger valor = new ValorInteger(
             "etiqueta.vacia",
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : 0
+            valorUsuario != null ? valorUsuario.getValor() : 2
         );
         return new Parametro(EnumParametro.PERIODO_EMA_EMA_VWAP_SUPPORT, EnumParametro.PERIODO_EMA_EMA_VWAP_SUPPORT.getEtiqueta(), valor, opciones);
     }
@@ -126,18 +126,18 @@ public class FiltroFactoryEmaVwapSupportResistance implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarString(EnumParametro.LINEA_REFERENCIA_EMA_VWAP_SUPPORT,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.LINEA_REFERENCIA_EMA_VWAP_SUPPORT,
                 valoresSeleccionados.get(EnumParametro.LINEA_REFERENCIA_EMA_VWAP_SUPPORT),
                 EnumLineaReferencia.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIPO_ROL_EMA_VWAP_SUPPORT,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIPO_ROL_EMA_VWAP_SUPPORT,
                 valoresSeleccionados.get(EnumParametro.TIPO_ROL_EMA_VWAP_SUPPORT), EnumTipoRol.class)
                 .ifPresent(errores::add);
 
         Valor lineaReferenciaValor = valoresSeleccionados.get(EnumParametro.LINEA_REFERENCIA_EMA_VWAP_SUPPORT);
         if (lineaReferenciaValor instanceof ValorString && ((ValorString) lineaReferenciaValor).getValor().equalsIgnoreCase(EnumLineaReferencia.EMA.name())) {
-            this.objValidador.validarInteger(EnumParametro.PERIODO_EMA_EMA_VWAP_SUPPORT,
+            this.objValidador.validarInteger(this.enumFiltro, EnumParametro.PERIODO_EMA_EMA_VWAP_SUPPORT,
                     valoresSeleccionados.get(EnumParametro.PERIODO_EMA_EMA_VWAP_SUPPORT), 2, 100)
                     .ifPresent(errores::add);
         }

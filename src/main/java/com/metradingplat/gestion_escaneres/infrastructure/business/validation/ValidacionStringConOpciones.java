@@ -2,6 +2,7 @@ package com.metradingplat.gestion_escaneres.infrastructure.business.validation;
 
 import com.metradingplat.gestion_escaneres.application.dto.ResultadoValidacion;
 
+import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
 import com.metradingplat.gestion_escaneres.domain.enums.valores.IEnumValores;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
@@ -19,32 +20,32 @@ public class ValidacionStringConOpciones<E extends Enum<E> & IEnumValores> imple
     }
 
     @Override
-    public Optional<ResultadoValidacion> validar(EnumParametro enumParametro, Valor valor) {
+    public Optional<ResultadoValidacion> validar(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor) {
         if (valor == null) {
-            return resultado("validation.parameter.value.required", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.value.required");
         }
 
         if (!(valor instanceof ValorString valorStr)) {
-            return resultado("validation.parameter.type.invalid", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.type.invalid");
         }
 
         String valorTexto = valorStr.getValor();
 
         if (valorTexto.trim().isEmpty()) {
-            return resultado("validation.parameter.value.required", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.value.required");
         }
 
         boolean esValido = opcionesPermitidas.stream()
                 .anyMatch(opcion -> opcion.name().equalsIgnoreCase(valorTexto));
 
         if (!esValido) {
-            return resultado("validation.enum.invalid", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.enum.invalid");
         }
 
         return Optional.empty();
     }
 
-    private Optional<ResultadoValidacion> resultado(String mensaje, EnumParametro parametro, Object... args) {
-        return Optional.of(new ResultadoValidacion(parametro, mensaje, args));
+    private Optional<ResultadoValidacion> resultado(EnumFiltro filtro, EnumParametro parametro, String mensaje, Object... args) {
+        return Optional.of(new ResultadoValidacion(filtro, parametro, mensaje, args));
     }
 }

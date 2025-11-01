@@ -117,14 +117,14 @@ public class FiltroFactoryPivots implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F,
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 0.0F,
                 50_000_000_000.0F)
                 .ifPresent(errores::add);
 
         List<EnumTimeframe> allowedTimeframesPivots = Arrays.asList(
             EnumTimeframe._1D, EnumTimeframe._1W, EnumTimeframe._1MO
         );
-        this.objValidador.validarStringConOpciones(EnumParametro.TIMEFRAME_PIVOTS,
+        this.objValidador.validarStringConOpciones(this.enumFiltro, EnumParametro.TIMEFRAME_PIVOTS,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_PIVOTS), allowedTimeframesPivots)
                 .ifPresent(errores::add);
 

@@ -99,7 +99,7 @@ public class FiltroFactoryOpeningRangeBreakdown implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_OPENING_RANGE_BREAKDOWN,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_OPENING_RANGE_BREAKDOWN,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_OPENING_RANGE_BREAKDOWN), EnumTimeframe.class)
                 .ifPresent(errores::add);
 

@@ -111,7 +111,7 @@ public class FiltroFactoryVolumeSpike implements IFiltroFactory {
         ValorInteger valor = new ValorInteger(
             "etiqueta.vacia",
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : 0
+            valorUsuario != null ? valorUsuario.getValor() : 5
         );
         return new Parametro(EnumParametro.NUMERO_VELAS_VOLUME_SPIKE,EnumParametro.NUMERO_VELAS_VOLUME_SPIKE.getEtiqueta(), valor, opciones);
     }
@@ -143,10 +143,10 @@ public class FiltroFactoryVolumeSpike implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 1.0F, 20.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 1.0F, 20.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarInteger(EnumParametro.NUMERO_VELAS_VOLUME_SPIKE,
+        this.objValidador.validarInteger(this.enumFiltro, EnumParametro.NUMERO_VELAS_VOLUME_SPIKE,
                 valoresSeleccionados.get(EnumParametro.NUMERO_VELAS_VOLUME_SPIKE), 5, 50)
                 .ifPresent(errores::add);
 
@@ -155,11 +155,11 @@ public class FiltroFactoryVolumeSpike implements IFiltroFactory {
             EnumTimeframe._15M, EnumTimeframe._30M, EnumTimeframe._45M, EnumTimeframe._1H,
             EnumTimeframe._2H, EnumTimeframe._3H, EnumTimeframe._4H, EnumTimeframe._12H, EnumTimeframe._1D
         );
-        this.objValidador.validarStringConOpciones(EnumParametro.TIMEFRAME_VOLUME_SPIKE,
+        this.objValidador.validarStringConOpciones(this.enumFiltro, EnumParametro.TIMEFRAME_VOLUME_SPIKE,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_VOLUME_SPIKE), allowedTimeframesVolumeSpike)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarFloat(EnumParametro.PROPORCION_VOLUMEN_VOLUME_SPIKE,
+        this.objValidador.validarFloat(this.enumFiltro, EnumParametro.PROPORCION_VOLUMEN_VOLUME_SPIKE,
                 valoresSeleccionados.get(EnumParametro.PROPORCION_VOLUMEN_VOLUME_SPIKE), 1.0F, 20.0F)
                 .ifPresent(errores::add);
 

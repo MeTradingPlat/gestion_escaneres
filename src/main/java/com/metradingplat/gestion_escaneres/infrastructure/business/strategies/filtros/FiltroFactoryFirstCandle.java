@@ -99,7 +99,7 @@ public class FiltroFactoryFirstCandle implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarString(EnumParametro.TIPO_VELA_FIRTS_CANDLE,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIPO_VELA_FIRTS_CANDLE,
                 valoresSeleccionados.get(EnumParametro.TIPO_VELA_FIRTS_CANDLE), EnumCondicionFirstCandle.class)
                 .ifPresent(errores::add);
 

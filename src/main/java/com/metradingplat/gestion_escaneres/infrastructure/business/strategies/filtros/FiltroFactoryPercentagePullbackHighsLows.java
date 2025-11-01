@@ -130,15 +130,15 @@ public class FiltroFactoryPercentagePullbackHighsLows implements IFiltroFactory 
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 5.0F, 90.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), 5.0F, 90.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.PUNTO_REFERENCIA_PULLBACK,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.PUNTO_REFERENCIA_PULLBACK,
                 valoresSeleccionados.get(EnumParametro.PUNTO_REFERENCIA_PULLBACK),
                 EnumPuntoReferenciaPullback.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarFloat(EnumParametro.PORCENTAJE_RETROCESO_PULLBACK,
+        this.objValidador.validarFloat(this.enumFiltro, EnumParametro.PORCENTAJE_RETROCESO_PULLBACK,
                 valoresSeleccionados.get(EnumParametro.PORCENTAJE_RETROCESO_PULLBACK), 5.0F, 90.0F)
                 .ifPresent(errores::add);
 

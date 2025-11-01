@@ -87,6 +87,7 @@ public class FiltroFactoryCrossingAboveBelow implements IFiltroFactory {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
         this.objValidador.validarString(
+                        this.enumFiltro,
                         EnumParametro.NIVEL_CRUCE_CROSSING_ABOVE_BELOW,
                         valoresSeleccionados.get(EnumParametro.NIVEL_CRUCE_CROSSING_ABOVE_BELOW),
                         EnumNivelCruce.class)
@@ -95,6 +96,7 @@ public class FiltroFactoryCrossingAboveBelow implements IFiltroFactory {
         Valor nivelCruceValor = valoresSeleccionados.get(EnumParametro.NIVEL_CRUCE_CROSSING_ABOVE_BELOW);
         if (nivelCruceValor instanceof ValorString && ((ValorString) nivelCruceValor).getValor().equalsIgnoreCase(EnumNivelCruce.EMA.name())) {
             this.objValidador.validarInteger(
+                            this.enumFiltro,
                             EnumParametro.PERIODO_EMA_CROSSING_ABOVE_BELOW,
                             valoresSeleccionados.get(EnumParametro.PERIODO_EMA_CROSSING_ABOVE_BELOW),
                             2, 100)
@@ -137,7 +139,7 @@ public class FiltroFactoryCrossingAboveBelow implements IFiltroFactory {
         ValorInteger valor = new ValorInteger(
                 "etiqueta.vacia",
                 enumTipoValor,
-                valorUsuario != null ? valorUsuario.getValor() : 0
+                valorUsuario != null ? valorUsuario.getValor() : 2
         );
         return new Parametro(
                 EnumParametro.PERIODO_EMA_CROSSING_ABOVE_BELOW,

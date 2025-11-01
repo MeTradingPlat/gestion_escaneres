@@ -112,11 +112,11 @@ public class FiltroFactoryBackToEmaAlert implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
         
-        this.objValidador.validarInteger(EnumParametro.PERIODO_EMA_BACK_TO_EMA,
+        this.objValidador.validarInteger(this.enumFiltro, EnumParametro.PERIODO_EMA_BACK_TO_EMA,
                 valoresSeleccionados.get(EnumParametro.PERIODO_EMA_BACK_TO_EMA), 1, 100)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.TIMEFRAME_BACK_TO_EMA,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.TIMEFRAME_BACK_TO_EMA,
                 valoresSeleccionados.get(EnumParametro.TIMEFRAME_BACK_TO_EMA), EnumTimeframe.class)
                 .ifPresent(errores::add);
 

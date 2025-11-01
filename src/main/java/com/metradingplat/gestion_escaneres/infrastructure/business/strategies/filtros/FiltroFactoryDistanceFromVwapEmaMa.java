@@ -131,11 +131,11 @@ public class FiltroFactoryDistanceFromVwapEmaMa implements IFiltroFactory {
 
     private Parametro crearParametroPeriodoLinea(ValorInteger valorUsuario) {
         EnumTipoValor enumTipoValor = EnumTipoValor.INTEGER;
-        List<Valor> opciones = this.obtenerOpciones(new IEnumValores[0]); 
+        List<Valor> opciones = this.obtenerOpciones(new IEnumValores[0]);
         ValorInteger valor = new ValorInteger(
             "etiqueta.vacia",
             enumTipoValor,
-            valorUsuario != null ? valorUsuario.getValor() : 0
+            valorUsuario != null ? valorUsuario.getValor() : 2
         );
         return new Parametro(EnumParametro.PERIODO_LINEA_DISTANCE_FROM_VWAP_EMA_MA, EnumParametro.PERIODO_LINEA_DISTANCE_FROM_VWAP_EMA_MA.getEtiqueta(), valor, opciones);
     }
@@ -144,24 +144,24 @@ public class FiltroFactoryDistanceFromVwapEmaMa implements IFiltroFactory {
     public List<ResultadoValidacion> validarValoresSeleccionados(Map<EnumParametro, Valor> valoresSeleccionados) {
         List<ResultadoValidacion> errores = new ArrayList<>();
 
-        this.objValidador.validarCondicional(EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), -100.0F, 100.0F)
+        this.objValidador.validarCondicional(this.enumFiltro, EnumParametro.CONDICION, valoresSeleccionados.get(EnumParametro.CONDICION), -100.0F, 100.0F)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.LINEA_REFERENCIA_DISTANCE_FROM_VWAP_EMA_MA,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.LINEA_REFERENCIA_DISTANCE_FROM_VWAP_EMA_MA,
                 valoresSeleccionados.get(EnumParametro.LINEA_REFERENCIA_DISTANCE_FROM_VWAP_EMA_MA),
                 EnumLineaReferencia.class)
                 .ifPresent(errores::add);
 
-        this.objValidador.validarString(EnumParametro.MODO_DISTANCIA_DISTANCE_FROM_VWAP_EMA_MA,
+        this.objValidador.validarString(this.enumFiltro, EnumParametro.MODO_DISTANCIA_DISTANCE_FROM_VWAP_EMA_MA,
                 valoresSeleccionados.get(EnumParametro.MODO_DISTANCIA_DISTANCE_FROM_VWAP_EMA_MA),
                 EnumTipoValorMedida.class)
                 .ifPresent(errores::add);
-        
+
         Valor lineaReferenciaValor = valoresSeleccionados.get(EnumParametro.LINEA_REFERENCIA_DISTANCE_FROM_VWAP_EMA_MA);
         if (lineaReferenciaValor instanceof ValorString &&
             (((ValorString) lineaReferenciaValor).getValor().equalsIgnoreCase(EnumLineaReferencia.EMA.name()) ||
             ((ValorString) lineaReferenciaValor).getValor().equalsIgnoreCase(EnumLineaReferencia.MA.name()))) {
-            this.objValidador.validarInteger(EnumParametro.PERIODO_LINEA_DISTANCE_FROM_VWAP_EMA_MA,
+            this.objValidador.validarInteger(this.enumFiltro, EnumParametro.PERIODO_LINEA_DISTANCE_FROM_VWAP_EMA_MA,
                     valoresSeleccionados.get(EnumParametro.PERIODO_LINEA_DISTANCE_FROM_VWAP_EMA_MA), 2, 200)
                     .ifPresent(errores::add);
         }

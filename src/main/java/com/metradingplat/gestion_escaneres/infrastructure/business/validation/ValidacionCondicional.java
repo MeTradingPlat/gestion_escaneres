@@ -1,6 +1,7 @@
 package com.metradingplat.gestion_escaneres.infrastructure.business.validation;
 
 import com.metradingplat.gestion_escaneres.application.dto.ResultadoValidacion;
+import com.metradingplat.gestion_escaneres.domain.enums.EnumFiltro;
 import com.metradingplat.gestion_escaneres.domain.enums.EnumParametro;
 import com.metradingplat.gestion_escaneres.domain.enums.valores.EnumCondicional;
 import com.metradingplat.gestion_escaneres.domain.models.Valor;
@@ -31,18 +32,18 @@ public class ValidacionCondicional implements IValidacionFiltro {
     }
 
     @Override
-    public Optional<ResultadoValidacion> validar(EnumParametro enumParametro, Valor valor) {
+    public Optional<ResultadoValidacion> validar(EnumFiltro enumFiltro, EnumParametro enumParametro, Valor valor) {
         if (!(valor instanceof ValorCondicional vc)) {
-            return resultado("validation.parameter.type.invalid", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.type.invalid");
         }
 
         // Validar que isInteger esté configurado
         if (vc.getIsInteger() == null) {
-            return resultado("validation.parameter.isInteger.notSet", enumParametro);
+            return resultado(enumFiltro, enumParametro, "validation.parameter.isInteger.notSet");
         }
 
         // Validar tipo de dato según isInteger
-        Optional<ResultadoValidacion> errorTipo = validarTipoDato(vc, enumParametro);
+        Optional<ResultadoValidacion> errorTipo = validarTipoDato(enumFiltro, vc, enumParametro);
         if (errorTipo.isPresent()) {
             return errorTipo;
         }
@@ -53,28 +54,28 @@ public class ValidacionCondicional implements IValidacionFiltro {
         // Validar operadores que requieren dos valores
         if (cond == EnumCondicional.ENTRE || cond == EnumCondicional.FUERA) {
             if (vc.getValor2() == null) {
-                return resultado("validation.parameter.secondValue.required", enumParametro);
+                return resultado(enumFiltro, enumParametro, "validation.parameter.secondValue.required");
             }
 
             Float v2 = toFloat(vc.getValor2());
 
             // Validar orden de valores
             if (cond == EnumCondicional.ENTRE && v1 >= v2) {
-                return resultado("validation.parameter.values.orderInvalid.between", enumParametro, v1, v2);
+                return resultado(enumFiltro, enumParametro, "validation.parameter.values.orderInvalid.between", v1, v2);
             }
             if (cond == EnumCondicional.FUERA && v1 <= v2) {
-                return resultado("validation.parameter.values.orderInvalid.outside", enumParametro, v1, v2);
+                return resultado(enumFiltro, enumParametro, "validation.parameter.values.orderInvalid.outside", v1, v2);
             }
 
             // Validar rango
             if (v1 < min || v2 > max) {
-                return resultado("validation.parameter.values.outOfRange", enumParametro, min, max);
+                return resultado(enumFiltro, enumParametro, "validation.parameter.values.outOfRange", min, max);
             }
 
         } else {
             // Validar rango para operadores de un solo valor
             if (v1 < min || v1 > max) {
-                return resultado("validation.parameter.values.outOfRange", enumParametro, min, max);
+                return resultado(enumFiltro, enumParametro, "validation.parameter.values.outOfRange", min, max);
             }
         }
 
@@ -94,7 +95,7 @@ public class ValidacionCondicional implements IValidacionFiltro {
      * @param enumParametro Parámetro para el mensaje de error
      * @return Optional con error si la conversión no es segura, empty si es válido
      */
-    private Optional<ResultadoValidacion> validarTipoDato(ValorCondicional vc, EnumParametro enumParametro) {
+    private Optional<ResultadoValidacion> validarTipoDato(EnumFiltro enumFiltro, ValorCondicional vc, EnumParametro enumParametro) {
         Number v1 = vc.getValor1();
         Number v2 = vc.getValor2();
         Boolean isInteger = vc.getIsInteger();
@@ -104,13 +105,13 @@ public class ValidacionCondicional implements IValidacionFiltro {
             if (v1 != null && (v1 instanceof Float || v1 instanceof Double)) {
                 // Verificar si tiene decimales
                 if (tieneDecimales(v1)) {
-                    return resultado("validation.parameter.type.floatToIntegerLoss", enumParametro);
+                    return resultado(enumFiltro, enumParametro, "validation.parameter.type.floatToIntegerLoss");
                 }
             }
             if (v2 != null && (v2 instanceof Float || v2 instanceof Double)) {
                 // Verificar si tiene decimales
                 if (tieneDecimales(v2)) {
-                    return resultado("validation.parameter.type.floatToIntegerLoss", enumParametro);
+                    return resultado(enumFiltro, enumParametro, "validation.parameter.type.floatToIntegerLoss");
                 }
             }
         }
@@ -154,7 +155,7 @@ public class ValidacionCondicional implements IValidacionFiltro {
      * @param args Argumentos adicionales para el mensaje
      * @return Optional con el resultado de validación
      */
-    private Optional<ResultadoValidacion> resultado(String mensaje, EnumParametro parametro, Object... args) {
-        return Optional.of(new ResultadoValidacion(parametro, mensaje, args));
+    private Optional<ResultadoValidacion> resultado(EnumFiltro filtro, EnumParametro parametro, String mensaje, Object... args) {
+        return Optional.of(new ResultadoValidacion(filtro, parametro, mensaje, args));
     }
 }
