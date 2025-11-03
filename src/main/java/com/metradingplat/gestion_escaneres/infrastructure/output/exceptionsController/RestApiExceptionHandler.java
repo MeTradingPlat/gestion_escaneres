@@ -99,13 +99,29 @@ public class RestApiExceptionHandler {
             return null;
         }
 
-        // Buscar patrón: ["nombreCampo"]
+        // Buscar patrón: ["nombreCampo"] en el mensaje principal
         int startIdx = message.lastIndexOf("[\"");
         if (startIdx != -1) {
             int endIdx = message.indexOf("\"]", startIdx);
             if (endIdx != -1) {
                 return message.substring(startIdx + 2, endIdx);
             }
+        }
+
+        // Si no se encontró en el mensaje principal, buscar en la causa raíz
+        Throwable cause = ex.getCause();
+        while (cause != null) {
+            String causeMessage = cause.getMessage();
+            if (causeMessage != null) {
+                startIdx = causeMessage.lastIndexOf("[\"");
+                if (startIdx != -1) {
+                    int endIdx = causeMessage.indexOf("\"]", startIdx);
+                    if (endIdx != -1) {
+                        return causeMessage.substring(startIdx + 2, endIdx);
+                    }
+                }
+            }
+            cause = cause.getCause();
         }
 
         return null;
