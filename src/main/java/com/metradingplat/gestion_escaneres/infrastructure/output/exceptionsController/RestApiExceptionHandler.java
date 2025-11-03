@@ -12,6 +12,7 @@ import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsContr
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -45,6 +46,26 @@ public class RestApiExceptionHandler {
             HttpStatus.BAD_REQUEST,
             req,
             CodigoError.TIPO_DE_ARGUMENTO_INVALIDO.getLlaveMensaje()
+        );
+    }
+
+    /**
+     * Maneja errores de deserialización JSON (ej: formatos de fecha/hora inválidos).
+     *
+     * Se activa cuando Jackson no puede convertir el JSON del request body a los tipos Java
+     * esperados, como LocalTime, LocalDate, Integer, etc.
+     *
+     * @param ex Excepción de deserialización
+     * @param req Request HTTP para información de trazabilidad
+     * @return ResponseEntity con código 400 Bad Request
+     */
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Error> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest req) {
+        return createErrorResponse(
+            CodigoError.VIOLACION_REGLA_DE_NEGOCIO,
+            HttpStatus.BAD_REQUEST,
+            req,
+            "error.formato.datos.invalido"
         );
     }
 
