@@ -55,18 +55,60 @@ public class RestApiExceptionHandler {
      * Se activa cuando Jackson no puede convertir el JSON del request body a los tipos Java
      * esperados, como LocalTime, LocalDate, Integer, etc.
      *
+     * Intenta extraer el nombre del campo desde el mensaje de la excepción para
+     * proporcionar un error más específico al frontend.
+     *
      * @param ex Excepción de deserialización
      * @param req Request HTTP para información de trazabilidad
      * @return ResponseEntity con código 400 Bad Request
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Error> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpServletRequest req) {
-        return createErrorResponse(
-            CodigoError.VIOLACION_REGLA_DE_NEGOCIO,
-            HttpStatus.BAD_REQUEST,
-            req,
-            "error.formato.datos.invalido"
+        // Intentar extraer el nombre del campo del mensaje de la excepción
+        String fieldName = extractFieldNameFromException(ex);
+        String errorMessage = internacionalizarMensaje("error.formato.datos.invalido");
+
+        // Si encontramos el campo, formateamos el mensaje como "campo: mensaje"
+        String finalMessage = fieldName != null
+            ? fieldName + ": " + errorMessage
+            : errorMessage;
+
+        Error error = ErrorUtils.crearError(
+            CodigoError.VIOLACION_REGLA_DE_NEGOCIO.getCodigo(),
+            finalMessage,
+            HttpStatus.BAD_REQUEST.value(),
+            req.getRequestURL().toString(),
+            req.getMethod()
         );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    /**
+     * Intenta extraer el nombre del campo desde el mensaje de la excepción.
+     *
+     * El mensaje de Jackson típicamente incluye el path del campo en formato:
+     * "... through reference chain: ClassName["fieldName"]..."
+     *
+     * @param ex La excepción de deserialización
+     * @return El nombre del campo o null si no se puede determinar
+     */
+    private String extractFieldNameFromException(HttpMessageNotReadableException ex) {
+        String message = ex.getMessage();
+        if (message == null) {
+            return null;
+        }
+
+        // Buscar patrón: ["nombreCampo"]
+        int startIdx = message.lastIndexOf("[\"");
+        if (startIdx != -1) {
+            int endIdx = message.indexOf("\"]", startIdx);
+            if (endIdx != -1) {
+                return message.substring(startIdx + 2, endIdx);
+            }
+        }
+
+        return null;
     }
 
     @ExceptionHandler(EntidadYaExisteException.class)
