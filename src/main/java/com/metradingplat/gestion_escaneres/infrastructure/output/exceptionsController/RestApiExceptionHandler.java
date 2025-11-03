@@ -165,7 +165,24 @@ public class RestApiExceptionHandler {
 
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String campo = ((FieldError) error).getField();
-            String mensajeDeError = internacionalizarMensaje(error.getDefaultMessage(), error.getArguments());
+
+            // Procesar argumentos para convertir DefaultMessageSourceResolvable a valores reales
+            // Bean Validation pasa: [ConstraintDescriptorImpl, <valor_validacion>]
+            // donde el primer elemento es el nombre del campo (que ignoramos) y los siguientes
+            // son los valores de la constraint (ej: min, max para @Size)
+            Object[] args = error.getArguments();
+            Object[] processedArgs = null;
+            if (args != null && args.length > 1) {
+                // Crear array con los argumentos reales, saltando el primer elemento
+                // que es el DefaultMessageSourceResolvable con el nombre del campo
+                processedArgs = new Object[args.length - 1];
+                int targetIndex = 0;
+                for (int i = 1; i < args.length; i++) {
+                    processedArgs[targetIndex++] = args[i];
+                }
+            }
+
+            String mensajeDeError = internacionalizarMensaje(error.getDefaultMessage(), processedArgs);
             erroresDetallados.put(campo, mensajeDeError);
 
             if (mensajeCompleto.length() > 0) {
