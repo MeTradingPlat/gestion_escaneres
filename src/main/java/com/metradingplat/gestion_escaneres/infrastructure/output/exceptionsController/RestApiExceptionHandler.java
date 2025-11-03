@@ -12,6 +12,7 @@ import com.metradingplat.gestion_escaneres.infrastructure.output.exceptionsContr
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -243,7 +244,28 @@ public class RestApiExceptionHandler {
         Map<String, String> erroresDetallados = new HashMap<>();
 
         ex.getBindingResult().getAllErrors().forEach(error -> {
-            String campo = ((FieldError) error).getField();
+            String campo;
+
+            // Diferenciar entre errores de campo y errores de objeto (clase)
+            if (error instanceof FieldError) {
+                campo = ((FieldError) error).getField();
+            } else {
+                // Es un ObjectError (validación a nivel de clase como @ValidTimeRange)
+                // En este caso, el error afecta a múltiples campos
+                // Extraer los campos del mensaje o anotación
+                ObjectError objectError = (ObjectError) error;
+
+                // Para @ValidTimeRange, queremos mostrar el error en ambos campos de tiempo
+                // Podemos extraerlo del código del error
+                String code = objectError.getCode();
+                if (code != null && code.contains("ValidTimeRange")) {
+                    // Es un error de rango de tiempo, afecta a horaInicio y horaFin
+                    campo = "horaInicio;horaFin"; // Usamos punto y coma para indicar múltiples campos
+                } else {
+                    // Fallback: usar el nombre del objeto
+                    campo = objectError.getObjectName();
+                }
+            }
 
             // Procesar argumentos para convertir DefaultMessageSourceResolvable a valores reales
             // Bean Validation pasa: [ConstraintDescriptorImpl, <valor_validacion>]
@@ -262,12 +284,19 @@ public class RestApiExceptionHandler {
             }
 
             String mensajeDeError = internacionalizarMensaje(error.getDefaultMessage(), processedArgs);
-            erroresDetallados.put(campo, mensajeDeError);
 
-            if (mensajeCompleto.length() > 0) {
-                mensajeCompleto.append("; ");
+            // Si el campo contiene múltiples nombres separados por punto y coma,
+            // agregar el error a cada uno
+            String[] campos = campo.split(";");
+            for (String c : campos) {
+                c = c.trim();
+                erroresDetallados.put(c, mensajeDeError);
+
+                if (mensajeCompleto.length() > 0) {
+                    mensajeCompleto.append("; ");
+                }
+                mensajeCompleto.append(c).append(": ").append(mensajeDeError);
             }
-            mensajeCompleto.append(campo).append(": ").append(mensajeDeError);
         });
 
         // Crear error siguiendo RFC 7807
